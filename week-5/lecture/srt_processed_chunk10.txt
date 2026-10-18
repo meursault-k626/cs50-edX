@@ -1,0 +1,200 @@
+bit today because it starts to escalate quickly.
+It's useful and it might very well be useful for problems at 5 in particular,
+but I think more healthily reviewed step by step at a slower pace.
+Here is where I'm asking myself,
+all right,
+if it's not the only element in the list and
+it doesn't belong at the beginning of the list,
+well,
+it belongs somewhere later in the list,
+which gives me two final scenarios.
+Let's figure out which scenario we're in.
+Let's use this 4 loop to iterate over all of the as
+as many of the notes in the list as we need to.
+If we get all the way to the end,
+because our pointer variable now equals null,
+it's like following the arrows,
+following the arrows,
+and maybe we're trying to insert the number 5.
+I've already hit the number 4.
+I've hit null.
+5 belongs at the end.
+So here we have our promised append code,
+which is exactly the same as before,
+but now I'm doing it conditionally
+if I've indeed found my way to the end of the list.
+And then lastly,
+let me scroll down just a little bit.
+If it's not the case that the list is empty and it's not the case that the new
+node belongs at the beginning and it's not the
+case that the new node belongs at the end,
+I'm just somewhere in the middle of the list because the new number I'm inserting
+is less than
+the one I'm looking at here,
+and it's OK to use two arrows,
+but I'll wave my hands at that for now.
+These 3 lines,
+2 pointer manipulations and a break is what's going
+to stitch together that 3 in between the two.
+And the 4.
+And let me propose for lecture's sake take this on
+faith that this collectively does stitch things together properly,
+but I do think,
+as you'll see in Problem set 5,
+it's a much better exercise to think through a little more carefully step by step
+because there's just a lot of fine tuning of these
+pointers together and the order of operations does matter.
+But at the very end of this program,
+notice this is Kind of mindless,
+even though the syntax is undoubtedly less familiar.
+Here is how just like traversing the whole list to print it out,
+we can similarly do one more pass over the linked list
+and
+free every one of the nodes.
+But notice it's not quite as simple as just saying free the whole list.
+Free is not that smart.
+Mao is not that smart,
+and Even though you have called Mallock 123 times,
+you have to really call free.
+You have to call free 123 times.
+You can't just pass at the beginning of the link list and say you figure out what to
+delete because it has no idea what a linked
+list is or what your data structure actually is.
+So
+the reason that this loop is a little complicated
+is that what I'm doing with these three lines
+is essentially traversing my list.
+And making sure that I have a pointer that when I'm ready to delete the 31,
+I have a pointer pointing at the 2,
+and then I free the 1.
+I update my pointer to point at the 3,
+and then I delete the 2.
+I update my pointer to point at the 4,
+then I delete the 3,
+and then I delete the 4.
+So there's a bit of trickery involved
+in making sure you don't orphan things
+step
+by step.
+that was a lot.
+Let me pause here.
+To see
+If there are in fact any questions,
+even though we're deliberately waving our hands at some of those
+details.
+Questions on this.
+Now,
+let me add one final flourish.
+If we were to really quibble over this,
+I mean,
+my God,
+we're up to 80 lines of code already just to implement the numbers 1234,
+but
+there are some subtle bugs in here at the moment.
+So for instance,
+suppose that
+something goes wrong with Mao inside of this for loop here,
+and suppose that it's not your first iteration,
+something goes wrong on maybe the second or the third iteration.
+Why is this
+error check suddenly bad as I've implemented it?
+Yeah.
+I didn't free the memory from the previous iteration,
+so this is where like,
+oh,
+like memory management starts to get really annoying because if
+you do want to practice what I've been preaching,
+which is free any memory you've allocated and you've already allocated one,
+maybe two nodes because Mao is again failing maybe at the last iteration here,
+you have to somehow go back and free all of that,
+and that's fine.
+Like we have code at the bottom of my file here which
+could traverse through the existing list and just free it all.
+So I could just copy paste that code,
+put it in.
+To my if condition and then run that code 2 to delete the whole list,
+but at this point,
+if you're copying and pasting,
+you're probably doing something wrong.
+And so let me propose as a final version of this just for your reference later
+in the 9th and final in version 9 of this file here,
+0 indexed what we have.
+Give me one second to just make a quick copy and copy it over
+in list 9.c. Our last version of this,
+we have
+the following
+whereby now
+in my function.
+Uh,
+in my main function,
+I have the exact same code as before,
+but I've taken the liberty of implementing an unload function
+so that I can call it here as well as at
+the bottom of this main function so I can unload it here or unload the list there,
+and all I've done now is in good form in terms of design,
+just implement the notion of deleting a linked list in its own function
+so I can call any number of times from any number of places.
+But just so you've seen
+how I might do that there.
+Alright,
+so let's ask the question,
+after all this,
+what is the running time of inserting into a linked list?
+They go of
+Say a lot,
+big of.
+And damn it,
+like that's no better.
+All right,
+what's the running time of searching a linked list?
+Big old event,
+damn it,
+uh,
+what's the running time of deleting from a linked list?
+Big O of end.
+So like everything is literally big O of ends.
+So there's the price we've suddenly paid.
+We have an hour after we started with arrays gotten to
+the point where we can dynamically grow in a linked lists,
+and I dare say,
+even though we've not done it and won't do it today,
+shrink the linked list by freeing things that we don't need.
+So we have the dynamism and we can make more efficient use of
+memory even if it's very fragmented and there's a few bytes here,
+a few bytes there,
+but we've paid this price because with the rays recall,
+even our phone book example,
+we at least had binary search,
+the running time for.
+Which was big O of log and so my God,
+not only are we spending more space,
+the darn thing is slower.
+Surely this is not how our phone contacts are implemented.
+Surely this is not how stacks and cues are always implemented.
+And indeed it's not.
+This is just going to be a stepping stone to now doing a sort
+of mash up of data structures whereby we take the best features of arrays,
+the best features of linked lists,
+mash them together to get new and improved data structures,
+but for that we're going to have to have some
+cookies first and we'll come back in 10 minutes.
+Cookies are now served.
+right,
+we are back.
+So let's recap how we got here and why.
+So we started with our old friend's arrays,
+which we introduced in week 2,
+and recalled that the whole appeal of arrays was that one,
+as all things go,
+like relatively simple,
+certainly now in retrospect,
+but more importantly,
+they were really darned fast.
+Like arrays insofar as they are stored back to back
+contiguous in memory means that we could do very simple
+arithmetic recall to like figure out the length of it
+and then divide by 2 to get the middle,
+divide by 2 again to get the.
+of the middle and so forth.
+And even though we might have to deal with a little bit of rounding,
+arrays lent themselves to binary search and thus logarithmic time,

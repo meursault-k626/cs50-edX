@@ -1,0 +1,200 @@
+that too is a lot.
+Let me pause here to see if there are.
+Any questions?
+And if you're feeling like that fire hose,
+like this is why we transitioned to Python where
+all of this now gets swept under the rug,
+but
+it's still happening,
+just not by us in a week.
+Questions,
+yeah.
+Yeah,
+really good question.
+So we,
+here I've been preaching like we don't want to lose memory.
+We don't want to leak memory,
+and here I am fairly extravagantly now spending twice
+as much memory to maintain this data structure,
+that's going to be among the themes with all of the data structures we talk about.
+If we want to gain some benefit like
+dynamic growth and shrinking of the data structure,
+you've got to give me something,
+and what you've got to give me in this case is the ability to use more space.
+In a bit today and after a break in particular we're
+going to we'd really like these algorithms to be faster.
+Well,
+that's fine,
+but you're going to have to give me something in return.
+You're going to have to spend more space to make the code faster.
+And so time and space and financial cost and human
+time and any number of other resources are all things that
+you need to evaluate as a programmer or a manager and
+decide which is least and or most important to you.
+And right now
+I don't care about space as much as I care
+about the dynamism that I'm trying to solve first.
+Other questions
+on here,
+yeah.
+this point.
+Yes,
+why am I using Pointer instead of N?
+I,
+well,
+yes,
+I could reusen at this point.
+I deliberately chose to use Pointer for two reasons.
+One,
+I'm using it for different reasons here.
+Two,
+it's not necessarily the best idea to use one variable here for
+a specific purpose and then reuse the name down here besides,
+it's out of scope at this point anyway.
+So it just makes me feel better that
+I have different variables doing different things,
+but it would not break if I did it your way.
+Other questions.
+Yeah,
+and back.
+Are pointers temporary,
+not necessarily like the linked list we are building
+up in memory exists because we are using pointers
+to build this data structure and to keep it
+intact for as long as the program is running.
+My temporary variables N and pointer PTR in this case,
+those are ephemeral,
+and I'm only using them to kind of stitch things together temporarily.
+A good question.
+All right,
+so let's now motivate why we're spending so much
+time sort of stitching these things together so carefully.
+Well,
+here's our little cheat sheet of common but not exhaustive running times.
+Let's consider what the running time is for some fairly basic
+stick operations like inserting a number into a linked list,
+maybe searching for a number in the link list or traversing it,
+and also deleting ultimately numbers in a linked list.
+So here is my list initially,
+completely empty,
+and suppose I go ahead and insert the one.
+Then I insert the 2,
+then I insert the 3 using code like we just wrote.
+I love this approach because even though
+it looks a little scary at first,
+this is probably the simplest way to implement insertion into a linked list.
+Why?
+Because I'm just constantly prepending the next element,
+prepending,
+prepending,
+which means All of my hard work is just here at the beginning of the list.
+So even if this thing has 1000 elements in it,
+I'm only manipulating some pointers all the
+way over here pictorialally at the left,
+which means it's pretty darn fast.
+So given that definition in this picture,
+what would you say the big O running time is of
+insertion into a link list when using my current implementation?
+Big goal of one.
+Why?
+Well,
+it's not literally one step,
+but it is a constant number of steps because if
+we literally counted the lines of code I was executing,
+it's a few steps to sort of 0.1 thing up here,
+point the other thing down here,
+then update the third and boom,
+we're done.
+In particular,
+what my current code does not care about is the whole length of this list.
+Why?
+Because I'm never traversing the whole thing for the insertion part.
+I am obviously for the printing part,
+but for the insertion I'm just prepending again and again.
+The downside though of this approach is that
+the whole darn thing is coming out backwards.
+I'm not doing anything with regard to the ordering of these elements,
+which means what's the running time of search going to be,
+for instance?
+If I tell you search for like the number one,
+find it for me.
+What's the running time gonna be there in Big O?
+They go of,
+yeah.
+Big event because in the worst case it's going to be all
+the way at the end and we've seen this scenario before,
+so it's big O of end for
+searching.
+It's definitely big O event for traversing or printing,
+but that goes without saying if you want to print every element,
+obviously you have to touch every one of the N elements.
+But what about deletion?
+Suppose I want to delete an element that's going to be in big O of.
+Also,
+and why?
+Because again,
+in the worst case it could be all the way at the end.
+So only insertion as currently implemented is big O of one
+because
+we are exercising full control over where the new
+elements go irrespective of what the actual values are.
+So things could escalate quickly here if we
+do actually want to start keeping things,
+say,
+in
+sordid order because we.
+No longer just naively plop things at the very beginning of the list.
+I think we need to start being a little more careful as to where we put things.
+So in fact,
+even though
+we're doing OK on Insert right now,
+we still have big O of N for the searching and for the deletion,
+which we won't do in code,
+as well as of course for traversal.
+So how else might we go about building this list?
+Well,
+let me propose that we could maybe append to the end of the list.
+Let's try that and see if it gets us anywhere better.
+So here's my list initially,
+completely empty,
+aka null.
+I go ahead and insert the number 1 as before,
+but now in this algorithm I'm going to insert the number 2 and the number 3.
+So this is great because now by chance it ended up beautifully in order,
+but that's because I chose the numbers 123,
+but we'll come back to that detail.
+Let's consider now what the running time is of this algorithm of insertion
+using a pending to the list.
+What's the big O not big running time of insertion now?
+Big old even end.
+So it's sort of strictly worse because now it's always going at the end.
+Now I could be a little smart about it.
+I could just allocate another pointer and just always have
+another pointer pointing at the end of the list,
+just as I have a pointer pointing to the start of the list.
+That's totally fine if you're willing to spend one more pointer,
+which is a drop in the bucket,
+a legitimate solution,
+but where I'd like to go with this.
+Let's maintain sorted order
+no matter
+the order in which the numbers are inserted,
+whether it's 1233212 13,
+3312,
+whatever order the human types in the numbers,
+I want to build the structure out such that they always end up in sorted order
+just so that my contacts in my iPhone or
+my Android phone for instance are sorted as intended.
+So how do we go about doing that?
+Well,
+here we're still dealing with some big O.
+Let's try this.
+Here's my list initially empty.
+Now we,
+the user inserts person number 2 1st,
+so it ends up there.
+Then they insert number 1.
+I'd like it to go there.
+Person number 4,
+it goes over there,
+and then person number 3,

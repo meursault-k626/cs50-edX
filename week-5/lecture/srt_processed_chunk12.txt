@@ -1,0 +1,200 @@
+This means I can divide and.
+the problem right off the bat.
+I know that 5 is going to be to the right
+of this node,
+which means effectively if you think in your
+mind's eye about snipping the branch there,
+I have just halved the problem essentially like dividing the phone book in half.
+Why?
+Because I don't even waste time looking at this subtree,
+the left child of the 4 element.
+Meanwhile,
+if I go from the root
+to its right child here,
+I see the number 6.5,
+of course,
+is less than 6,
+so this is effectively like snipping off that child.
+because I don't need to go further there because I know
+a smaller element is going to be in this direction,
+and that's the key property of a binary search tree.
+It's not just a family tree with numbers all over the place.
+They follow a certain pattern.
+Every
+element is going to be greater than its left child and less than
+its right child,
+assuming you don't have identical values,
+and that property is actually a recursive one to
+borrow terminology from a couple of weeks back,
+recall that a recursive function is one.
+That calls itself a recursive data structure like the pyramid in Mario
+is a data structure that can be defined in terms of itself.
+Well,
+a binary search tree is a recursive property insofar as if it applies to this node,
+it also applies to this note.
+Case in 0.2 is greater than 1,
+but it's also less than 3.
+It's true over here.
+6 is greater than 5,
+but less than 7,
+and it's technically.
+True of the leaf nodes because the definition is at
+least not violated there because they don't even have children
+themselves.
+So this is a binary search tree because of that pattern.
+So this then invites the question,
+Well,
+how long does it take us to search for a value in a binary search tree?
+Well,
+if the number is 5,
+it's going to take me 12 steps.
+But if there's an elements here,
+can someone want to generalize that
+either mathematically or just instinctively big go of.
+Logn and even if you're not quite sure how the math works
+out any time you take a data set and you have it,
+have it,
+have it,
+we're talking about log based 2 of N again and
+indeed that's going to describe the height of this tree.
+The height of this tree is essentially
+log based 2 of N because if N is 7,
+it's going to give me.
+essentially 2 when we round appropriately.
+If we round up if we've got 8 elements log based 2 of 82 to the 3,
+so that means 3,
+so 123,
+it kind of works out even if I'm doing that a bit quickly.
+The height of this tree is log base 2 of N,
+AKA big O of log N.
+How long does it take to insert?
+I think it's going to take log in because I can insert over
+here or over here or over here depending on where the number goes.
+How long does it take to delete?
+I'll claim it's going to take about the same.
+So wow,
+we're back in business.
+I've got now the ability
+to grow and shrink my data structure because if I want to insert the number 8,
+it's going to go right there.
+If I want to insert the number like 5.5,
+I can see where I would put it.
+It's going to be easy to add new nodes by just updating the
+pointers without copying everything in memory like we had to for arrays,
+but
+there is a downside here.
+I gotta concede something.
+What am I,
+what price am I paying?
+What's the trade off here to gain that dynamism and that speed,
+Yeah,
+I'm literally using 3 times as much memory now
+because even though it's not depicted here explicitly,
+each of these squares represents an integer and a pointer and another pointer,
+so that's like 16,
+that's like 20 bytes at this point of memory instead of
+just 4 bytes for each of the integers in an array.
+Nowadays though.
+Space is pretty cheap.
+We all have very large Dropbox folders,
+iCloud folders,
+and the like,
+so it's not really a big deal to use that many more bytes.
+Certainly not a big deal for 7 numbers,
+but if it's 7 million numbers,
+maybe this isn't the best data structure to use even if speed is important.
+You've got to decide ultimately based on your actual use case what.
+Matters more.
+So in short,
+a binary search tree you can kind of think of as an amalgam of,
+or rather a variant of a linked list,
+except that every node has as many as 2 pointers instead of one,
+which is what gives us now this
+this second dimension.
+And in fact this translates pretty nicely to code.
+In fact,
+if we consider how we implemented in a linked list,
+a node,
+recall that it looked like this where you got a number in each
+node and a pointer to the next element in the linked list.
+Well,
+I.
+Think for a binary search tree we can sort of borrow this as inspiration,
+make a little more room because we need two pointers instead of 1,
+and I'm just going to call the left child the left pointer
+and the right pointer,
+but here is the 3 times as much space,
+give or take,
+because I now have 3 elements associated 2 pieces of
+metadata and 1 piece of data that I actually care about
+to stitch this thing here together.
+All right,
+well,
+if this is the data structure there,
+how could I implement this in code?
+Well,
+here's where recursion again comes into.
+The fact that a binary search tree
+is recursive in nature in that what you say about this node,
+about it being greater than the left child and less than the right child can
+be said of this node and this node and this node and this note,
+you can leverage that beautifully in code like this.
+So suppose I'm implementing a search function in C whose
+purpose in life is just to say yes or no,
+true or false,
+the number you're looking for is in this tree,
+which might be a useful thing to check in
+in an algorithm.
+Search is going to take two arguments I propose the number you're searching for
+and a pointer to the tree,
+that is the root of the tree initially.
+So how do you actually traverse this thing in C code?
+Well,
+we can pluck off the easy case first,
+the base case.
+If the tree itself is null,
+like if you hand me nothing,
+I'll give you your answer right now,
+false,
+like there's no
+number here if the tree is empty.
+So that's easy.
+Otherwise,
+if the number you're looking for
+is less than.
+The number in the current node.
+So tree is what's passed in a pointer to the root.
+So if you follow the arrow,
+you can get inside of that value and see its number.
+If the number you're looking for is less than that,
+OK,
+you want to what snip off the right tree and dive down the left subtree.
+So
+you search
+the tree's
+left child for the same number.
+Else if the number you're looking for is greater than that number,
+you search.
+For the trees,
+right,
+child,
+for that same number.
+And the 4th and final scenario is what?
+Well,
+if the number you're looking for equals the number in the current node,
+you got it
+return true.
+And if you're uh recall some of our past design discussions,
+this is sort of a waste of everyone's time to ask this question explicitly.
+Let me tighten this up design wise because there's only 4 possible scenarios.
+Either there's nothing there,
+it's to the left,
+it's to the right,
+or you found it.
+It's right there.
+So
+whether or not you agree at this point in your programming career,
+like there is a beauty to this code that most programmers would claim is
+here and that it's so relatively elegant
+whereby you've defined what the function is.
+You've got this base case which is arguably one of the clunkiest parts,

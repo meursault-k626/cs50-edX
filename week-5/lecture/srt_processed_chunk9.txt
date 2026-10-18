@@ -1,0 +1,200 @@
+it ends up here.
+Even though it's sort of obvious with a piece
+of paper and pencil how to stitch this together,
+this is now an annoying number of logical steps because there are so many
+opportunities where I could screw up and orphan one or more of these nodes.
+But let's consider
+the scenarios that we encounter we might encounter.
+Maybe we get lucky and it's like an empty list and
+we just have to insert one new node that is trivial.
+We've done that already.
+The 2 was super easy to implement.
+The one
+could be really easy to implement too because that involves the
+pre-pending scenario and we've seen that prepending is super simple.
+So there's only two other scenarios to consider
+app pending,
+if it's a really big number and ends up at the end,
+and we've talked about but haven't seen code for that.
+The annoying one,
+I dare say is going to be when the new number belongs in the middle.
+But I propose to think through it this way
+because now you just have 4 problems to solve,
+not just one massive.
+Ill-defined problem.
+You've got scenarios in which you want to insert a new node into an empty list.
+You want to prepend the new node into the beginning of the list,
+append it to the end of the list,
+or somewhere in the middle.
+So that's like 4
+blocks of code in my program.
+I can now sort of take the proverbial baby steps and implement this bit by bit.
+And to do this,
+let me propose that in a moment I'll switch over to VS code,
+but
+Uh,
+sort of Julia Child style,
+I'm going to open up a pre-made version of the program
+that actually gives us a working solution,
+albeit
+initially with some bugs.
+So here we have out of the oven,
+this version of List.c at the.
+Top of the file.
+I've got my same includes as before.
+I've got my same structure as before here.
+I've again got in main void.
+I've got the beginning of my list here,
+setting it equal to null,
+and then for the sake of discussion,
+I'm going to insert 3 values for this example,
+12,
+and 3.
+By
+allocating enough room for a node,
+setting it equal to N,
+then I'm going to make sure a sanity check that N is not null,
+and then I'm going to actually populate this
+with the human's first choice of values.
+So let me scroll down,
+but as such,
+there's nothing too new just yet.
+Here we have
+the lines of code in which I'm getting in it from the user,
+setting next equal to null,
+and then I'm pre-pending no matter what per our
+earlier version that we did on the fly.
+This new node to the list and then updating the list to
+point to it and then down here I'm printing the numbers.
+So this is where we left off,
+but this is a pre-made version that's nicely commented.
+It's on the course's website for reference.
+What I'm not doing now is intelligently prepending,
+appending,
+or plopping the code in the middle.
+So how do we do that?
+Let's take a look at this version of the code.
+So everything thus far is the same.
+And if I scroll down besides the new comments,
+you'll see that now I'm starting to make some decisions after I
+have allocated the new node and populated its number and next field.
+As an aside,
+I don't strictly need to initialize the next field to null because eventually,
+as we've done in every past example,
+I've updated that next field anyway.
+However,
+because this one might now end up at the end
+of the list and I just want to program defensively,
+initializing pointers to null before you're ready to assign their value.
+is a good thing in general.
+So here's the first of the questions I'm going to ask myself.
+If the list into which I am inserting this new node is empty,
+so it's the beginning of the story,
+super easy,
+just set the list equal to the address of that new node,
+and we're done.
+That's what happened when we inserted a bit ago,
+the number 2 for the.
+Very first time.
+So indeed what has just happened here is that now
+the list previously empty contains only a node containing 2.
+However,
+thereafter there was another scenario.
+So when we moved on in our story and added the number 1 to the list,
+well that happened to end up at the beginning,
+but it could also end up at the end or in the middle.
+So let's break down those scenarios here too.
+So here,
+if it is not the case that the list is empty
+in that if condition,
+we're going to end up here now in the Eps.
+What do I want to do here?
+Well,
+let's go ahead and for now in this simplified version append it
+to the end of the list so we can see that code.
+How do I do this?
+Well,
+I'm using a 4 loop,
+much like the one I had before,
+which just allows me to traverse the existing list whether it has one node or many,
+and I'm going to ask a question.
+If following the current nodes pointer field next field leads me to null.
+AKA the end of the list.
+OK,
+let's go ahead and update the end of the list
+to actually equal the new node.
+So in other words,
+if I'm sort of following,
+following,
+following all of the arrows and I reach a node whose next field is null,
+no problem,
+update that next field to point
+to the new node I want to insert,
+irrespective of the values.
+I just want to append this node no matter what,
+and then I want to break out of the code.
+Then at the bottom of this version of the program,
+it's all quite the same printing out the numbers using the 4
+loop version of my code from before instead of the Y loop,
+but they're equivalent.
+But what I did do in advance in baking this version of the
+program is also go through the motions of freeing every one of the nodes
+afterward,
+but we'll come back to that.
+So this version of the code,
+just to be clear,
+only appends nodes to the list.
+It's still not treating things in order,
+but we've now seen two of the scenarios plucked off.
+The list is empty
+or it has numbers,
+and we want to put something at the end.
+So let me propose now that I take
+out of our distribution code
+another version of this program that
+does that and a bit more.
+I'm going to go ahead and open up in just a moment,
+a new and improved version of lists.c and now.
+It looks almost the same at the top,
+scrolling down,
+scrolling down,
+scrolling down.
+Here's some now familiar code.
+If the list is empty,
+do that simple thing as before and just prepend it,
+or rather just set it equal to the list.
+But here is now where we're adding some inequality.
+So if the number in question
+belongs at the beginning of the list,
+so if the number
+in the new node N
+is less than.
+The number
+in the current list,
+which is presumed to be the first node at the moment,
+then
+go ahead and update the new node's next field
+to point at the existing list
+and then update the list to point at this new node,
+thereby giving us from 2 in the list
+to 1 and 2 in the list.
+To be clear,
+if I go back to VS code here,
+what's happened here is because 1 is less than 2.
+Of course I'm going to update
+the new nodes next field to point to the list.
+What does this mean?
+Well,
+the new node at this point in the story is the new
+node for the number one because that's the second thing we're inserting.
+I'm going to update
+its
+next field
+to be whatever the list a moment ago was already pointing at.
+So this is the after effect,
+but a moment ago list was pointing at only the 2.
+So now the next field of the 1 points at the 2.
+And then lastly here in this line,
+I update the list pointer
+to be the address of that new node.
+And here's where I'll wave my hand a little

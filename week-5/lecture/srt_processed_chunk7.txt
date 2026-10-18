@@ -1,0 +1,200 @@
+leak.
+I can never get that back or give it back
+to the operating system until the program itself finally quits.
+So I think I need to be a little smarter and not do this line quite like this yet.
+I think what I want to do,
+and I've rewound,
+so list is still pointing to the original list and is pointing to only the new node.
+What I think we need to do is something like this.
+And this is why the code was fairly non-obvious in VS code at first.
+Go to N,
+follow the arrow,
+go to the next field,
+and here's the cleverness point this pointer
+to the existing list's value.
+So if the existing list is pointing here,
+that just means,
+hey,
+point this to the exact same thing
+because now
+I can safely update the list.
+To point at the same thing as n,
+so its arrow now points here,
+but even when I get rid of N,
+I wonderfully have the whole thing stitched together.
+And the metaphor I often think of is like around Christmas
+time and olden times when people would like stitch popcorn together.
+That's what you're kind of doing with a thread here.
+You're trying to stitch together these nodes or popcorn kernels,
+if you will,
+such that one can lead you to the next,
+can lead you to the next,
+can lead you to the next,
+but you can never let go of part of that strand.
+In the process.
+So here now we have a list which is great because notice we haven't touched the 1,
+but we've added the 2.
+We can go ahead in a moment and add the 3,
+but you can perhaps see where this is going.
+I'm kind of doing it backwards by accident,
+but we'll get there soon.
+So now let's allocate a new node,
+run through in our mind's eye all of those same steps.
+I'm going to hopefully end up with a list that now looks like this.
+And even though it's kind of long and stringy,
+these values could be anywhere in memory,
+but because of these various pointers,
+I can jump from one.
+to the other,
+making more efficient use of everything
+inside of the computer's own memory.
+All right,
+but of course we've got this symptom
+that didn't really intend whereby the whole darn thing is backwards,
+but I think that's kind of OK for now.
+But I'd like to propose that we consider how we can now maybe traverse this thing
+and actually print out the values in memory.
+So let me go ahead and
+do this.
+Let's go ahead and how about
+Let's say,
+let's go back to VS code here.
+So at this point in the story,
+we've got the same code that implements that same idea,
+except I'm using Get in just so that I can dynamically type in the 1,
+the 2,
+and the 3 without having to hard code it into the actual code.
+Suppose that after doing this exercise,
+I
+want to do something interesting like
+print the numbers.
+Well,
+we don't have that code yet
+in this version of my
+program.
+So let's bring that back.
+Last time I did this just using a for loop and array notation,
+and I think I can do that,
+but let me propose first
+that
+I implement this idea pictorally.
+Here's the same diagram.
+This is what exists in the computer's memory.
+If I want to go ahead and print out these numbers,
+albeit in reverse order,
+let me propose that we can do this by giving ourselves another temporary variable.
+We'll call it PTR pointer for short,
+and that's like having another foam finger that points at
+The start of the list.
+So it's not pointing at list,
+it points at whatever list is pointing at,
+which means here.
+Then I can print out the 3 pretty easily so long
+as I next update pointer to point to the 2,
+print it out,
+then point it to the 1,
+print it out,
+and eventually I'm going to realize,
+oh,
+I'm out of nodes because the end of this.
+List is null.
+So that's the idea I want to implement now logically in code,
+create a temporary variable called pointer,
+set it equal to whatever the list itself is.
+Print out the value,
+update the pointer,
+print out the value,
+update the pointer.
+Print out the value,
+update the pointer,
+realize it's null,
+and stop.
+So in code it's a relatively small loop even though the syntax is still pretty new
+since we've only just started playing with memory since last week.
+But what I'm going to do is exactly what I proposed.
+I'm going to create a new pointer
+called PTR and set it equal to the list itself.
+That's like having another foam finger temporarily pointing
+at the first element in the list.
+Then what I'm going to do is say while that temporary variable is not null,
+go ahead.
+And traverse
+the list.
+What do I mean by that?
+Well,
+let's go ahead and print out the current element in
+the list by using percent I backslash N and printing out
+whatever the pointer is pointing at,
+specifically its number field.
+So that is follow the arrow and print out the number.
+Then
+inside of this loop I'm going to update
+after doing that my temporary variable called pointer
+to be equal to pointer arrow next.
+And that will have the effect with just those
+few lines of code of implementing precisely this idea.
+I first set pointer equal to the list,
+which happens to point here first.
+I then do my print F and then I update
+the next field.
+I rather,
+I update pointer to be the value of pointer.
+Follow the arrow next.
+So if this is OX123,
+for instance,
+that is what is now in,
+sorry,
+if this is OX 456,
+that is what's now in.
+So the arrow effectively looks there in my for loop.
+I print out with percent I this number,
+and then
+I go to the next field,
+follow the arrow,
+and then
+set it equal to
+rather
+whatever this pointer is here,
+OX 789,
+set it equal to
+the pointer there.
+So I effectively move the arrow there.
+Then lastly I update PTR to point to the value of this next field,
+which is null,
+which means effectively pointer itself is null,
+which means the 4 loop cleverly.
+Stops now because I was supposed to do this whole loop while pointer is not null,
+but pointer is now null.
+And just as an aside,
+if you prefer the semantics of a 4 loop,
+there's nothing new here per se.
+I can do this exact same thing using a 4 loop
+simply as follows,
+and it's a little tighter to implement less follows.
+I can say 4.
+Instead of I equals 0 in that old approach,
+I can actually use pointers in a 4 loop like this
+for node star pointer equals the start of the list.
+Keep doing something so long as pointer does not equal null,
+and on each iteration of this loop,
+update the pointer
+to equal whatever the pointer's own next field is.
+And then inside of this 4 loop,
+print out using percent I backslash N,
+the current pointer's number.
+Field semicolon.
+So here is where again we see the equivalent of 4 loops and wild loops.
+What you can do with one,
+you can do with the other.
+This is a little more elegant in that you can express a
+whole lot of logic in one line of the 4 loop.
+Frankly,
+I do think the first version is nonetheless more readable.
+So let me undo,
+undo,
+undo,
+undo everything I just did on the course's website.
+You'll see both of these versions.
+This one's a little more pedantic as to what it's doing step
+by step.
+OK,

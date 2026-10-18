@@ -1,0 +1,200 @@
+Then
+I'm gonna need to stitch this together further.
+So I'll propose that all we need to do,
+and let's clean this up first,
+is now make sure that we string these nodes together.
+This syntax isn't quite right because technically,
+because of precedents I need to oops I need to.
+Uh,
+de-reference N and then go inside of it.
+I need to de-reference N and then go inside of it.
+However,
+this syntax,
+if it's looking a little overwhelming and you have no idea now what's going on,
+thankfully in C there's much simpler syntax,
+which is this
+go to the node and go inside it to get the number.
+Go to the node and go inside it to get next.
+So the.
+The arrow notation that I promised we would now have
+is the same thing
+as using the star operator,
+the Dreference operator,
+parenthesizing it,
+then the dot operator,
+which is just a pain in the neck to write out all the time.
+I dare say narrow number and narrow next is just much simpler.
+It says go to N and point at
+the number field or the next field respectively.
+All right,
+so
+the last thing I'm going to propose we do,
+and then we'll make this much more clear in picture form as this,
+let's go ahead and prepended.
+The node to the list and by prepent I mean insert it at the beginning,
+insert it at the beginning,
+insert it at the beginning again and again.
+I'm going to say
+n
+next equals list,
+then update the list to set equal
+to n.
+And then after all of this mess,
+I'm going to return 0.
+OK,
+this was a huge amount of code,
+but let me give you a quick recap,
+then we'll paint a picture.
+Here is my list initially,
+so the foam finger is pointing to null,
+which means the list is of size 0.
+There's nothing there.
+Then I asked the computer to do this 3 times.
+Give me enough memory for a new node.
+Then,
+after checking that it's not null,
+put the user's favorite number in it
+and update the next field for the moment to null.
+Then lastly,
+go ahead and prepend this brand new node to the existing list,
+and by pre
+prepended I mean put it at the front.
+So
+N at this moment is pointing to that new node,
+and I'm saying,
+you know what,
+whatever the current list is,
+empty or otherwise,
+set the next pointer
+equal to the list,
+whatever that list is,
+and then change the list to point at this new node.
+So now let's do this more carefully step by step
+in picture form.
+So I'm going to propose that we go
+through some of these representative lines as follows.
+Here is the first line of code,
+even without the assignment.
+If you just allocate a variable called list
+that's a pointer to a node,
+what you essentially have is a box of memory that looks like this.
+It's a Garbage value though because there's no assignment operator,
+so who knows what's inside of this pointer.
+That is why in my actual code I set it equal to null,
+which effectively creates in memory the same box but gets rid
+of Oscar the Grouch and puts the null value there.
+So we know it's not a garbage value,
+it's a pointer known as null.
+So that's what that very first line of code did in the computer's memory.
+The next thing I wanted to do
+was allocate enough memory for a node,
+not a node star for a whole node.
+I want that whole chunk of a rectangle
+given to me in memory.
+That's going to return to me the address of the first byte thereof,
+and I'm going to store that in a temporary variable called N.
+So at this point in the story,
+N
+is going to be a pointer of its own,
+another box that initially.
+It is going to be a garbage value,
+but because I am using the assignment operator,
+it's going to point to
+that chunk of memory which Mao,
+if successful,
+presumably allocated for me in the computer's memory.
+So N for all intents and purposes,
+points
+at that same chunk.
+These values are still garbage values because it's just a chunk of memory.
+Who knows what it's been used before.
+But that's why after this line of code I took care to get
+an in from the user and then initialize the next pointer to null.
+So for instance,
+for the sake of discussion,
+let's get rid of get in for the picture and
+just say the human typed in the number 1 initially.
+Well,
+that's equivalent
+to putting the 1 in the number field by first going to the address of inn.
+And then dereferencing it using the star and the dot notation respectively.
+So that means follow the arrow and then change number to the value 1.
+Then the next line of code.
+Or rather,
+or equivalently you can just do the same thing and thankfully now C
+syntax lines up with what the pictures look like we've been drawing.
+Go to N,
+follow the arrow to the number field.
+That's literally what the syntax is telling me.
+Meanwhile,
+if I use that same syntax again for narrow next,
+set it equal to null,
+that's like saying go to N,
+follow the arrow,
+and change the next field in this case to null,
+or we'll just blank it out to be clear.
+So at this point in the story we have allocated the node,
+we have stored 1 and null there.
+List is still null.
+N is pointing to this,
+but the whole point of this exercise is to add this node to the list.
+So we need to somehow update this value,
+which is why ultimately I'm going to do something like list equals n.
+Now that seems a little weird semantically,
+but recall that N is a point.
+That is the address
+pointing at OX 123 or wherever that is.
+So to point list at the same node,
+it's equivalent to setting list equal to N
+because then we'll effectively have an arrow identical
+from list pointing at that new node.
+And at this point I don't even care what N is anymore.
+It was always meant to be a temporary value.
+This now is my list.
+So even though I did it in code already preemptively in a loop,
+the first iteration for that loop literally created this in memory.
+Let me pause
+before we go through numbers 2 and 3
+for any questions.
+Because the VS code version looks scary,
+this is perhaps a little more bite sized.
+OK,
+so how about we do this twice more for 2 and 3 respectively.
+So again,
+inside of our loop we're back to this line which asks the
+operating system for enough memory for the size of a node,
+stores that address temporarily in a variable called N.
+So here's our friend Oscar brought back onto the screen.
+Maybe the new chunk of memory is over there.
+This effectively points N at that chunk of memory.
+The next line of code inside of that loop that's relevant is this,
+and we'll get rid of get in to just pretend that I literally typed in 2.
+We're going to go to this version of N,
+follow the arrow,
+go to the number field,
+and set that equal to 2.
+The next line of code we start at the end,
+follow the arrow,
+change the next field to null,
+and then same lines as before,
+we now need to update.
+equaling n,
+but something's about to go wrong here.
+If I update list to point to the same node
+that N is pointing at,
+watch what happens.
+I set list equal to that,
+and because it's temporary,
+might as well go away at this point,
+but.
+What have I done wrong logically here?
+Yeah.
+Yeah,
+I lost the arrow to the original node.
+I have orphaned the first node because now nothing
+in my code is actually pointing at it.
+I've got in duplication two pointers pointing at this chunk of memory,
+so this thing,
+even though we obviously as humans can still see it,
+we have lost track and code of where it is,
+which means that is the definition of a me.

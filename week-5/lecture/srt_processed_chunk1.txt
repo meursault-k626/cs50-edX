@@ -1,0 +1,200 @@
+and might never wear anything other than black as a result.
+If he does a wash before he actually reaches the blue in the red sweater there.
+So a stack,
+as we've just seen,
+has a LIFO property to it last in,
+first out.
+So if I do a load of law.
+and I plop some more sweaters on this stack.
+Well,
+I'm presumably going to use the last sweater that went in first as opposed to
+trying to create a mess and like you know pull the bottommost sweater out,
+which is just going to be a little more effort than
+it would be otherwise from just taking it from the top.
+So sometimes last in first out doesn't give you maybe
+this fairness property you might want for other problems,
+but it does give you an efficiency,
+a convenience,
+certainly.
+So maybe that might be compelling.
+And stacks are actually everywhere too.
+If you've checked your Gmail.
+Recently,
+odds are you've opened up gmail.com or Outlook.com,
+and you've looked at your inbox,
+and where does the new mail by default end up at the top,
+at the top,
+at the top.
+And I dare say all of us are guilty of sort of neglecting emails that fall
+below the breaker onto the next page and sort of focusing only on the last in
+and therefore replying to it first out,
+which isn't great maybe for the senders of those emails,
+but it's just how those user interfaces are implemented
+quite often unless you override those default settings.
+So how might we implement
+a stack?
+Well,
+we need to implement more technically two fundamental operations.
+The analogs of NQ and DQ in the world of stacks are called push,
+which means push something onto the top of the stack,
+and pop,
+which means remove something from the top of the stack also.
+And the team in the cafeterias and dining halls on campus do this all day long.
+Any of the cafeterias or dining halls that have stacks of trays,
+of course,
+you put the first tray at the bottom and then the
+next tray and the next tray in the next tray,
+and which tray do all of you.
+Pick up well,
+presumably the one on the very top,
+because it's even harder to grab the bottommost tray
+than it would be for something like a sweater.
+As a result,
+there's maybe undesirable properties like maybe no one ever gets to the nasty tray
+at the very bottom of the stack because we're constantly replenishing the top ones.
+But thanks to gravity like that just happens to be the most appropriate data
+structure in the real world for distributing things like trays in a cafeteria.
+So how might we implement that idea in code?
+Well,
+funny enough,
+we can pretty much use the exact.
+Same
+structure we could just rename Q to stack because at the
+end of the day we need to keep track of some number
+of people and maybe people's a weird sort of analog here,
+but we kept everything else the same so why not that?
+But the size is also something we still need to remember and it
+turns out it's a little easier to implement a stack in this way
+because you can always remove it from the end of the array,
+end of the array,
+and the first thing that went into the stack,
+the first in,
+can always stay at location 0,
+for instance.
+But ultimately we could implement it in this way,
+but we have the same darn limitation.
+You can still only put 50 sweaters,
+50 trays,
+50 people into that stack data structure.
+So this is just one implementation approach.
+But that doesn't mean that's necessarily a limitation of stacks and cues.
+They're abstract in the sense that we could do better.
+We could maybe start to manage our own memory,
+move away from statically defining the total size of this array,
+and just start allocating and de-allocating.
+That is growing and shrinking.
+The data structure instead,
+which is to say we can make these abstract
+data types much less abstract with actual implementations.
+Let's consider a data structure that we saw an abstract data type
+that we saw early on that we didn't necessarily give this name.
+A dictionary is yet another abstract data type
+that's sort of everywhere in the world,
+literally in the world of dictionaries containing words and their definitions,
+and you can think of a dictionary really in the abstract if you were
+to draw this on the chalkboard as really just a two column table.
+Whereby on the left is the word and on the right is the definition.
+If it's a physical book,
+it's essentially the same thing with lots of columns of words on the left,
+often bold faced,
+and then the definitions right next to them.
+You can also see this in the context of like a phone book,
+which is where we began the course in week zero,
+where it's essentially a dictionary of names
+and numbers instead of words and definitions,
+and a computer scientist would generalize the
+notion of a dictionary further and just call
+the thing on the left a key and the thing on the right a value.
+You and these things are omnipresent in computing
+and you're going to start to see them
+all the more today and next week and beyond in that if you just want to associate
+some piece of data with another piece of data,
+a so-called key value pair,
+a dictionary is going to be your go to
+data type.
+But even these two we can implement in
+different ways for reasons that we've already seen,
+like maybe there's only a finite size to this dictionary if we're using an array.
+Maybe we can do better than that,
+and maybe a The dictionary,
+if implemented one way,
+is going to be fast.
+Maybe if implemented in another way it's going to be slow.
+So we'll consider these other design possibilities today too in the
+context of phone books and other data structures as well.
+After all,
+if you have an iPhone or an Android phone and Apple or Google only decided
+that you can have 50 friends because they implemented the Contacts app in an array,
+I mean that would be an annoying limitation.
+So presumably they've done things a little more dynamically as we'll do today.
+So let's focus on the first of the data structures we saw back in week 2,
+that is an array which we recall was just a chunk of memory
+where you can store values in it back to back to back,
+and that was the fundamental definition.
+The values are back to back to back or contiguous in memory,
+and as we've seen,
+we generally have to decide in advance the size of an array.
+So for instance,
+if we want to store 3 values like 12,
+and 3,
+it might look pictorally like this or in code,
+let's go ahead and implement this same idea and take a moment.
+Whip up our very first program here and we'll call it say Li.c.
+And in this program,
+let's just do something demonstrative of how you could
+use arrays to store 3 things in memory.
+It's quite simply the numbers 123,
+but you can imagine it being 3 people's names,
+3 sweaters,
+3 people,
+or any other piece of data as well.
+So I'm going to go ahead and at the top of lists.c include standardio.h.
+I'm going to then do in main void,
+so no command line arguments.
+Then I'm going to go ahead and give myself in a red.
+A of integers of size 3 called list,
+and that's how we've done that from week 2 onward.
+Then just for the sake of discussion,
+I'm going to hard code some representative values.
+So the first value will be at location 0 because the rays are 0 indexed.
+Then I'm going to do the second value,
+which will be 2,
+and then the third value which will be at location 2,
+but the value will be 3.
+Now just to prove that we've stored this correctly in memory,
+let's just do a quick 4 loop 4 in to I equals equals 0.
+Uh,
+I is less than
+3,
+I plus plus.
+And then inside of this for loop,
+I'm just going to do a quick print F of percent I backslash N printing out the value
+of list at location I.
+So it's not a useful program per se,
+but it gives us an array to play with.
+It prints out what's in it,
+so hopefully we will see 12.
+And 3 on the screen.
+So let me make this list program
+list enter and voila,
+we're on our way going.
+All right,
+but what if now
+we actually want to
+uh change that design and be like,
+oh shoot,
+I now have a 4th number that I want to store or just bought a 4th sweater or a
+4th person wants to get in line or I want to add a 4th brand to my contacts,
+whatever the scenario might be,
+it stands to reason that ideally you would plop that 4th value right here in memory.
+That everything remains contiguous.
+You're still using an array.
+Your code doesn't really have to change except for the length.
+All for all intents and purposes,
+it's the same implementation using just a bit more memory.
+But recall that when you declare an array of a fixed size,
+you only are getting
+promised that chunk of memory,
+not necessarily more memory to the right,
+to the left,
+above or below conceptually,

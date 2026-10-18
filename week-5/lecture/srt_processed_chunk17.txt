@@ -1,0 +1,82 @@
+there's a huge amount of wasted memory just as we saw with the hash function.
+But that can be reined in as you'll explore on the problem set with
+a try most of the pointers in those arrays are just null and unused,
+and it just tends to result in you're using way more memory
+to solve the problem correctly,
+but in a way that tends to slow the computer
+down and just waste more memory than is useful.
+That said,
+just as we started today,
+there are stacks in the real world,
+there's cues in the real world.
+There are even
+Hash tables in the real world,
+which you'll indeed implement in code for problem set 5.
+Has anyone here ever had a salad from a restaurant
+called Sweetgreen in Harvard Square also elsewhere in the US,
+like
+12,
+like 2 of us,
+3 of us.
+OK,
+so
+not hard to imagine going to such a store,
+getting in a queue and staring at a shelf like this because what
+Sweetreen and similar restaurants do when you order for pickup is they.
+Hash
+your salad into a shelf like this.
+And so literally in sweet green might you see some wooden shelves like this.
+This is the A through E bucket,
+the F through J bucket,
+the K through N bucket,
+and the O through Z bucket whereby if your name
+like Maly happens to be in one of those ranges,
+they will hash my salad and put it here.
+But of course,
+even in the real world,
+there are some constraints and what can go wrong with this here
+hash table system.
+Someone who's been there,
+maybe.
+What can go wrong?
+Imagine like the extreme,
+lots of values here,
+yeah.
+So there's no more space,
+right?
+So,
+and this has happened to me in the past,
+especially since Sure before adopting this system.
+They used to put the A's here,
+the B's here,
+the C's here,
+the D's here,
+and so forth.
+And then someone at some point realized that they were very frequently
+overflowing the A's to the B's and the B's to the C's,
+that no one was using Q or Z with any frequency,
+and so they were sort of wasting space and running out of space.
+So at some point they decided to like literally
+remove most of the letters of the alphabet,
+make the buckets bigger,
+and.
+You are,
+so now it's very unlikely that you're going to have so many
+K's through ends that you overflow the shelf,
+but this is in the real world a data structure like we've seen today.
+And so therefore among the goals,
+even as arcane as things seem to be getting with
+all the pointer notation and dereferencing this and that,
+really all we're doing in code is implementing real world solutions that other
+people have already come up with and translating them to a new domain.
+And the very last thing you'll do.
+See this week is indeed implement your very own spell checker whereby we'll
+give you a very large file of all 100,000 plus English words.
+You'll have to come up with a clever and efficient way
+to load it up into memory,
+and we'll give you tools that will actually measure how fast or how slow your code is,
+how much memory or how little memory your code is,
+so as to actually compare it against not just your own but perhaps others as well.
+So with that said,
+we'll end a bit early today.
+We'll see you next time.

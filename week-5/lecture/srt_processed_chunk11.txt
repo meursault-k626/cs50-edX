@@ -1,0 +1,200 @@
+so big O of login.
+But today I claim that the downside of arrays that that you have to
+decide in advance how big you want it to be and if you guess wrong
+and it's too small,
+how much memory you ask for,
+you then have to reallocate memory and that's fine.
+It's solvable with Mao or reallock,
+but it's going to take some amount of time to
+copy all of the old memory into the new memory.
+Whether you do it with a for loop or mount Realo does it for you.
+Meanwhile,
+we only did it with like 3 values,
+maybe 4,
+but imagine it being 3 million values that you now need to allocate more space for.
+You're going to waste a huge amount of time copying
+3 million values from the old location to the new.
+And so that's just generally not very appealing.
+And so that motivated a whole discussion of linked lists where by now we can
+create a more dynamic data structure whereby we only allocate memory as we need it,
+so we don't.
+To worry about underestimating or overestimating and therefore wasting memory,
+we can just go bit by bit for each new value.
+We allocate another node,
+another chunk of memory,
+and the thing just grows and grows and grows.
+But as we saw just before break,
+the downside is,
+even though we're avoiding the inefficiency of
+having to move stuff around in memory,
+once allocated to nodes can stay where they are and we just update our pointers,
+all of our running times for searching,
+inserting new elements,
+deleting old elements would seem to be big.
+O of N.
+But why was that?
+Well,
+in the context of a linked list,
+recall that it might look a little something like this whereby we
+have a pointer called list pointing to maybe 4 values like this,
+and suppose that we do want to
+search for a value.
+Now it's nice because in our latest version of this
+linked list,
+it was sorted from smallest to largest,
+and that was always a precondition of doing binary search,
+but even though it's obvious to our human eyes where the middle is,
+it's like roughly over there.
+How is the computer going to figure that out,
+or how is your code that you write?
+Well,
+unfortunately,
+the way we've stitched a link list together with these
+pointers is if you want to find the middle,
+you can,
+but you've got to start at the beginning,
+traverse the whole thing to figure out how long it is,
+then do it again and stop halfway through once
+you know what the halfway point roughly is.
+Then if you want to search the middle of the middle,
+you've.
+got to do that whole process again.
+And so now just to use binary search,
+you need to spend big O of end steps just to even find the middle.
+Now if your mind is kind of spinning and you're like,
+Well,
+maybe I could just kind of cheat and use a
+pointer to always point to the middle of the list,
+totally fine.
+You can spend in some additional space to remember
+the beginning in the middle of the list,
+the end of the list,
+but where does that stop?
+What if with binary search you go not Just to the middle,
+but the middle of the middle,
+the middle of the middle of the middle,
+the middle,
+are you going to keep around a pointer to every element because if you do,
+you're essentially back to an array if you've got one
+location for every other location.
+So it just kind of devolves into a mess even
+though there's some minor optimizations we could in fact make.
+In fact,
+we didn't talk about it yet,
+but one common alternative to a singly linked list,
+which ours is,
+it's.
+With a single pointer from node to node,
+computer scientists also like to talk about doubly
+linked lists where there's arrows going both directions,
+which actually would have simplified some of the last code
+that we looked at because I don't have to look ahead
+to figure out
+what I want to free or what and where I want to insert some value,
+but that too doesn't fundamentally change the speed,
+it just makes your code a little easier to write.
+So in short,
+with Linklis we get dynamism.
+We can now grow and shrink things without wasting time copying,
+but we've lost hold of our binary search,
+and that was very appealing as far back as week zero
+when we wanted to do something quite quickly.
+So let's see if we can't make some mashups now.
+Take some arrays,
+take some link lists,
+literally mash them together into a sort of Frankenstein data structure and
+see if we can't get some of the speed of arrays,
+but the dynamism of link lists.
+And so I give you trees.
+If you think about it in your mind's eye what a family tree looks like,
+where you typically have some parents and then
+some children and some grandchildren and so forth,
+it's this sort of tree-like structure,
+even though by convention it's drawn top down instead
+of bottom up like trees in the real world.
+But the top of that family tree
+we're going to call the root of the tree.
+It just so happens to indeed grow down.
+But a tree is a very common data structure
+and it's interesting vis a vis arrays and linked lists in
+that it's the first of our two dimensional data structures.
+An array is effectively just a Single dimension along from left to right.
+A link list is essentially the same,
+even though in reality it might be up,
+down,
+left and right in memory.
+It's still just one thing stitched together in a single dimension.
+A tree adds now a second dimension and specifically useful for
+us is what we're going to call binary search trees,
+which is spoiler,
+going to give us back the ability to use binary search,
+but we're going to store the data
+a little more cleverly than in arrays alone.
+Instead of storing our data in one dimension in a binary search tree,
+we're going to Store in effect in two different
+dimensions and that's going to gain us some speed.
+So here for instance is an array of 7 numbers as we might
+have seen it back in week 2 when we first introduced arrays.
+Let me draw our attention to the middle element
+and then to the middle of the middles,
+and then the middles of the middles of the
+middles just by color coding them slightly differently.
+If I were to run binary search on these numbers or the
+lockers that we had on the stage a few weeks back,
+I would jump to the middle,
+then the middle of the middle,
+and so forth.
+The catch though is that implemented.
+is an array,
+it's not going to be very easy to add new values.
+Why?
+Because if I want to add the number 8 or 9 or 10,
+I might get lucky and there might be room in memory here,
+but I might get unlucky,
+in which case then we've got to start jumping through those hoops of Mao
+or reo and and copying all of this memory to a new location,
+which is doable.
+We solved it in code,
+but it's going to be slow for larger data sets.
+So can we avoid that?
+Well,
+maybe I deliberately color coded things like this because let me
+propose that instead of storing these seven values in an array.
+Let's store them in a family tree-like structure like this where I
+just kind of exploded them vertically on the y axis here.
+So now the middle element.
+The 4s at the top of this tree.
+The 4,
+the 2 and the 6,
+which were the middle elements after the middle,
+are going to be to the left and right of the 4,
+and then these leaf nodes,
+so to speak,
+we borrow a lot of vernacular from the world of actual trees.
+These are leaves in the sense that they themselves have no children.
+They're at the edge of the data structure,
+are going to be the middles of the middles of the middles,
+but all of the data is still there.
+I've just exploded it from 1 to 2 dimensions,
+and let me propose that now that we have this technique of using pointers,
+which we use with.
+C code,
+but you can depict them pictorally with arrows.
+Let me propose that we stitch together these seven values in memory
+using a bunch of pointers whereby now each of these nodes drawn as a
+single square for simplicity is going to have not only an integer associated with it
+and not just one pointer but per these arrows as many as 2 arrows associated with it.
+So our nodes are about to go
+from data structures with 2 things,
+a number and a pointer to 3 things a number.
+And 2 pointers for the left and right child respectively.
+And I dare say now that we have a two dimensional tree data structure,
+consider how you might find a number therein.
+Suppose I'm searching for the number 5.
+Well,
+I start at the root of the data structure and
+even though our human eyes obviously know where we're going,
+notice what's important about this binary search tree.
+If I go to the root of the note of the tree,
+I see the 44 is obviously less than 5.
+What does this mean?

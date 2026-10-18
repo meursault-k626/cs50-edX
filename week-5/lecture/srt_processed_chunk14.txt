@@ -1,0 +1,200 @@
+So here for instance is where
+the first diamond might go,
+the club here,
+spade over here,
+diamond over here,
+and I can kind of just do this again and again,
+bucketizing literally.
+All of these values
+so that
+I've got a very simple heuristic that allows me to move the cards into these buckets,
+each of which is going to have a subset of the values,
+and then I've got smaller problems I can deal with.
+So assume that I bucketize all 52 of these values,
+then I've just got 4 problems remaining,
+and I dare say it's a little easier then because they're all of the same.
+So and so I can pretty easily sort it from ace to
+king or whatnot because those are effectively just numbers at that point.
+So hashing refers to again taking values from an infinite range.
+In this case it can be finite and it is in this case,
+but if you were doing it more generally with numbers,
+you just have to map it to a finite range like 1234 finite.
+Number of buckets of values at which point then you can
+solve the problem a little differently or a little more efficiently.
+So why is this germane?
+Well,
+I would propose that
+if we want to start organizing our data in memory
+toward an idealistic goal of achieving constant time,
+hashing might be one ingredient for the solution there too.
+And generally we're going to describe the process by which you decide
+what input goes to what output is namely what's called a hash function.
+It's a mathematical.
+Function or a function code that takes as input a card from a deck or maybe a
+word from a dictionary and outputs a value that
+represents the bucket into which it should go.
+So in the case of our contacts app,
+for instance,
+of course in the GUI of it you have all
+of your friends and family top to bottom alphabetically presumably,
+and you might want to ideally
+find someone
+quite quickly,
+ideally in constant time.
+The naive implementation that Apple or Google
+could implement is just use linear search,
+search through all of your contacts top to bottom,
+and eventually.
+You will correctly find the person,
+but wouldn't it be nice if they instead use an array and then
+they can use binary search and get you the person in logarithmic time?
+That's great.
+But if you have a lot of friends and family in there or a much larger data set,
+wouldn't it be nice to just jump to the answer in one step
+instead of even log of end step?
+So that's our goal.
+Can we get close to or actually at constant time?
+So with the hash function,
+we essentially have our old friend problem solving here,
+the inside of which
+the algorithm is known as a hash function.
+And for instance,
+if I'm looking at Mario's number.
+I might now want to look for Mario,
+not top to bottom or not divide and conquer jumping around
+to the the middle of the middle of the middle.
+Let me just figure out what bucket Mario is in.
+And in the English alphabet there's 26 letters of the alphabet A through Z,
+either uppercase or lowercase.
+And suppose that I want to find what bucket Mario is in.
+Well,
+much like these cards and the suits thereof,
+wouldn't it make sense that anyone whose names
+starts with A goes into the first bucket and
+maybe the Bs go into the second bucket and the Zs go into the last bucket.
+So it stands to.
+that if I pass in Mario to a hash function implemented in C or some other language,
+I would like to get back to the number 12 because M is the 13th letter of the alphabet,
+but if we start counting at 0 with our buckets,
+which are essentially an array,
+then it's index location 12 instead of 13.
+Similarly,
+if Luigi is the input,
+I'd like to get back to the number 11.
+So my hash function somehow takes his input in this story,
+a string,
+and gives me an integer.
+I claim there's theoretically an infinite number of
+names in the world in the English language.
+But there's only gonna be 26 possible answers from this hash function,
+0 through 25,
+so that's our infinite domain to our finite range
+instead of 4,
+it's now 26.
+All right,
+so what.
+Should we do with the computer's memory to leverage the fact that we
+can very easily bucketize names based on the first letter of someone's name?
+Well,
+let me propose that the hash function part of this,
+arcane as it looks,
+is actually pretty straightforward.
+So if you wanted to translate this idea into C,
+you can include Cy.H,
+which we've used a few times to get access to like functions like 2 upper,
+and this is just to make sure you can be case insensitive.
+Here's my hash function.
+And it's going to return an in,
+which is the goal.
+It takes a string as input.
+We'll call it name,
+and what does this function do?
+Well,
+it's kind of some clever asy arithmetic.
+It first converts to uppercase,
+the first letter of that person's name.
+So if it's all lower case,
+forces it to uppercase Y because I want to subtract no matter what 65,
+aka the Asky value of capital A from this,
+and I don't want to screw up the math if
+I'm doing like a lowercase letter minus a capital.
+I want minus is all.
+So this will return to me a number between 0 and 25 inclusive,
+because if it is a letter,
+a name that starts with a,
+I'm only looking at the first letter.
+I'm subtracting off A,
+that gives me 0,
+and I'm going to return 0 as a result,
+if it's Z,
+I'm going to return 25 instead.
+Now there's no error checking in here.
+If you type in non-English symbols,
+it's going to break.
+So let's just assume for simplicity this is indeed an English name that's coming in.
+I can refine this a little bit.
+I'm going to propose moving forward in our final week here of C
+there are some added defenses you can put in place when writing code.
+Like if you know
+that you're receiving a name as input that is you're passing something in by
+reference,
+there's a danger now per last week because now
+the caller of this function,
+whoever's using this function,
+is telling you where to find Mario and where to find.
+Luigi's name.
+The problem with that is that you could go to
+that address and actually change their name in memory,
+even if you're not supposed to.
+You're supposed to just use the name.
+So you can do something like const which says you should not be able to
+change this value even though I'm not giving you a copy of it by value.
+I'm giving you a reference there too.
+Another refinement here is that a hash function for an array is the goal.
+Should return a value that's 0 or 1 or 2 on up,
+never negative,
+so we can even more protectively say it's not just an in,
+it's an unsigned in,
+and we talked briefly about that last week,
+albeit in the context of CARS.
+These are just like minor improvements that
+makes your code arguably better designed because you're
+opening yourself up to fewer possible mistakes or issues.
+All right,
+so with that said,
+let's now assume that we've got this kind of function in implemented
+and we can now use it to decide what bucket to put.
+These people's names into,
+well,
+let's give you what are called hash tables,
+which are sort of the Swiss Army knives of data structures,
+the kind of thing that some computer scientists have been quoted as saying
+if they were stuck on a desert island with only one data structure,
+this is probably the one they would want.
+Why?
+It's just really generally useful because it
+allows you quite powerfully to associate keys
+with values,
+which is to say to come full circle today,
+hash tables are often how you would implement.
+at a lower level,
+the thing we began class with talking about dictionaries,
+collections of key value pairs that after all is what a phone book is if we call it,
+you know,
+names and numbers,
+but it's keys and values.
+That's what an actual English dictionary is the Oxford English Dictionary.
+It's a bunch of words and definitions or keys and values,
+so useful in general to be able to associate one piece of data with another
+ergo hash tables.
+So here's how you might implement and see a hash table.
+You want It to be a size 26,
+for instance,
+so 26 buckets from A to Z,
+hence the 26.
+You want this to be an array,
+and that's fine.
+This is an array of 4 buckets.
+I'm going to use an array of 26 buckets because a hash table 2
+is going to be an evolution of our linked list mashed together
+with an array.

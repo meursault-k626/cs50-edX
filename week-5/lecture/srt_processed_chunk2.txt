@@ -1,0 +1,200 @@
+because recall in the context of your whole computer,
+you've got this canvas of memory,
+all of which Represent here bytes and there could be a
+whole bunch of actual values or garbage values in memory.
+So in a more complicated program that 123 sure might end up here,
+but if I also had created a string in this program,
+H E L 00 world might have also ended up right next to it in memory,
+which means I can't just plop the four here because then
+if I'm still using that string elsewhere in my program,
+now it's going to say hello world instead
+of hello world because you're just claiming.
+The H that bye as your own,
+which does not in fact belong to your array.
+Of course it looks like there's plenty of other memory I could use
+here because these garbage values represented by Oscar are not being used.
+They've been used in the past,
+but we treat garbage values as memory we could reuse certainly.
+So wouldn't it be nice to maybe just plop the 123,
+and 4 in this chunk of memory over here?
+And I can totally do that.
+But of course if I want to do that,
+I've got to copy the first.
+3 values over and then put the 4th 1 there and then presumably
+give back to the operating system the memory I no longer need.
+So that in fact when using arrays is a perfectly valid solution
+and I think we can go ahead and do this in our same program.
+So let me go back to VS code here
+and instead of statically allocating memory for this array,
+and by static I mean literally hard coding,
+coding the number 3 here
+in a way that is permanent.
+Effectively,
+let me go ahead and do this instead.
+At the top of my code,
+let me delete the static allocation of that that array before,
+and now let me
+leverage my understanding,
+if still preliminary of pointers and memory management from this past week for
+to just dynamically allocate a guess at how much memory I need initially.
+So I'm going to go ahead and Use Malloch and allocate space for 3 integers,
+but integers take up a few bytes,
+and it usually is 4,
+but just for good measure,
+I'm going to say times whatever the size of an in is is the total number of bytes I want.
+So presumably it's going to be 3 times 4 equals 12,
+but I'm generalizing it.
+But then recall that Mao returns the address of that chunk of memory,
+the address of the first byte.
+So if I want to create an array effectively called list,
+I can't just do in list
+like this yet,
+but what I could say is that all right,
+now
+my list variable is actually going to be the address of an integer
+and set Mao's return value equal to that.
+So in code here,
+what I've done is I'm asking on the right hand side,
+the operating system,
+please give me 12 contiguous bytes in memory.
+All of those.
+Of course it can be numerically addressed like OX123,
+124,
+125.
+We've had that story before.
+Mallock by definition,
+returns the address of the first such byte,
+and it's on me to remember that I allocated 12 if need be.
+So I'm just storing the address of that first bye
+in a pointer
+called List.
+But recall from last week
+there's this functional equivalence we saw between
+treating a pointer as an array and
+Sometimes even treating an array
+like a pointer,
+the C language sort of lets us do this,
+this conversion,
+if you will.
+So what I could do here now is quite the same syntax as before.
+I could say Libra 0
+gets 1,
+Libra 1 gets 2,
+Libra 2 gets 3.
+And even though I have this fancy new line inspired by week 4,
+the syntax thereafter can be exactly the same.
+Why
+we'll recall that these three lines here using square bracket notation
+is just syntactic sugar for the stuff we learned last week.
+Specifically,
+I could instead of doing list 0,
+I could much more arcanely say go to
+that address in list and put the number 1 there,
+please.
+I can say
+go to the address list
+plus 1.
+And put the value 2 there.
+I could then say finally go to the address at list + 2
+and put the number 3 there,
+but this looks ridiculous and even sort of an experienced
+programmer might not be inclined to do this if with
+using fewer keystrokes and more readable code they could just
+do instead what I did the first time around,
+which is functionally the same,
+and just treat that chunk of memory as though it's an array.
+And the computer will essentially do
+the requisite pointer arithmetic to figure out
+where to put 12,
+and 3.
+So even though this is still kind of fresh hot off the press from last week,
+it's exactly the same as we tinkered with last week.
+So suppose now that some time passes and I realize
+for the sake of the story that oh shoot,
+I need more than 3 integers.
+I need space for 4 so as to achieve this picture in memory.
+Well,
+I could of course just like delete all that code,
+change the 3 to a 4,
+redo the whole thing,
+recompile the code,
+rerun it,
+but
+let me propose that we write our code in a way
+that allows us to change our mind while the program is running
+how much memory we actually need.
+And case in point,
+if you meet someone new,
+you want to add them to your phone,
+well,
+you.
+Obviously don't want to have to wait for Apple to recompile the Contacts app,
+reboot your phone just to add one more person.
+You want the program just to ask the operating system for
+more memory for that new person.
+So in this case,
+let's just pretend that some time passes and
+now I want to go ahead and actually change my
+mind and instead allocate space for 4 integers instead.
+While I could do something like this,
+I could just say literally list equals Mao of 4 times size of in.
+Semicolon.
+I don't need to redeclare list on line 13 because it already exists from line 5,
+but this is bad.
+Because what have I done wrong here in line 13?
+I've made a poor decision,
+yeah,
+in front.
+I'm wasting all of the memory I had from
+line 5 because I'm essentially forgetting where it is.
+If the list pointer is literally a pointer,
+like a foam finger pointing somewhere in memory,
+what I'm really doing is saying point it over here now,
+but I've completely lost track of those other 3 integers in memory,
+and that's what we described last week as a memory leak which you could
+find with Valgrind and if you didn't find it or fix it in code,
+eventually the computer and the program would slow down over time.
+So this is probably bad.
+It's not good.
+To just unilaterally change your mind and say no,
+no,
+no,
+forget about that memory.
+Give me a new chunk of memory,
+especially if you want to copy the old memory into the new just like I did a bit
+ago when trying to get the 123 into the bigger chunk of memory that can fit 1234.
+So how might I do this?
+Well,
+a temporary variable is kind of our go to solution.
+Anytime we need to remember something in addition to
+something we already have in mind.
+So let me just give myself a temporary variable called TMP by convention for short.
+And set the return value of this mala call to that,
+and then what I could do is something like this,
+much like my print statement earlier,
+I could do another 4 loop and say 4 into I equals 0.
+I is less than 3,
+I plus plus,
+and then in this 4 loop I could say
+treat that new chunk of memory as an array like we can
+set the I location equal to the IF location in list.
+So these lines here.
+Copy
+old list into new list.
+It copies those first three values,
+and then what I bet I could do at the bottom here is then just manually,
+I can say go to the 4th location,
+which when you zero index is technically bracket 3 and set that equal to the number 4.
+So these lines here.
+Copy the 1,
+the 2,
+and the 3 using a loop and then line 20 here at the moment just adds the fourth value.
+And again this is a stupid sort of way to write
+code in that if you want to put the 4 there,
+you should have just done it earlier.
+I'm just pretending that some time has indeed passed in the program and
+I've changed my mind along the way and I want to let the user
+add some value to memory.
+OK,
+but before we proceed further,
+I dare say that there are some

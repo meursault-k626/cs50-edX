@@ -1,0 +1,200 @@
+Other mistakes we should clean up.
+One of the lessons I preached last week was that any time you use Mallock,
+what should you do or check for?
+You should always what?
+You should always free.
+So here I'm clearly not freeing any memory,
+so I should definitely do that.
+And there was one other rule of thumb with memory.
+What should you always do
+when using male?
+Yeah.
+Check to see if null came back,
+which just means something is wrong,
+like it's out of memory or something else went wrong,
+and if you don't do that,
+your program may very well crash with one of those segmentation faults that we saw,
+uh,
+briefly in the past.
+So it makes the code a lot more bloated,
+but it is good practice.
+So let's just check if the list pointer I get back contains null,
+there's no point continuing on.
+Let's just go ahead and immediately.
+Return one because something has indeed gone wrong and then down here
+under Maoc again,
+let's do the same.
+If the temporary pointer also contains null,
+now let's go ahead and similarly return one or any other non-zero value.
+But here's the subtlety and let me combine your two ideas.
+If I immediately return one on line 20 after the second Mallock call fails,
+what should I still go back and do
+first?
+Yeah,
+you want to elaborate on your first instinct?
+Yeah,
+I want to still free the first chunk of memory
+because if we execute line 5 and all is well,
+which means that line 678,
+and 9 don't apply like it's not in fact nulled.
+We got back a legitimate value,
+that means we have a chunk of memory given to us for 3 integers,
+which means it still exists down here at line 19 and 20.
+So if I'm ready now to abort this program and return one to signify error,
+I first want to free.
+That original list and say to the operating system,
+Here's your memory back.
+Now,
+as an aside,
+strictly speaking,
+this is not necessary because the moment the program itself quits,
+the computer is just going to give back the memory to the operating system.
+So when programs quit,
+the memory leaks sort of go away,
+but your code is still buggy and generally we're running software
+that doesn't run for a split second but for minutes,
+hours,
+days,
+continually,
+in which case it's best practice to squash these memory.
+bugs now check for null free any memory so that you never indeed encounter
+these kinds of leaks.
+All right,
+so let's forge ahead a little bit more
+and let me propose that after we have done the copy,
+we now want to similarly free the original list.
+However,
+what I think we're going to want to do first is,
+after freeing the original list is remember
+that the new list is effectively.
+That which we allocated the second time around.
+So even though this program's getting a little long,
+notice that what I've just done is I've said,
+OK,
+store in the list variable the address of this new chunk of
+memory so that list now with a foam finger is effectively pointing here
+instead of up here.
+But before that I made sure to free what my finger was pointing at
+originally the list pointer.
+All right,
+lastly,
+let's just scroll down to the bottom of the code here.
+I can manually change the 3 to a 4 just to demonstrate that I've stored
+all 4 values in here and then at the very end of the program,
+I think I have to free the list again because now the list
+is pointing all the foam finger to the bigger chunk of memory,
+the one.
+234 and then I can go ahead and return 0 at the very end
+because all is hopefully
+well at this point.
+Let me go ahead and open my terminal window again and make this version of list.
+I made a lot of mistakes here,
+it seems.
+Let's scroll up to the very first
+call to undeclared library function mao.
+What have I apparently done wrong?
+Or forgotten
+What have I done wrong?
+Yeah,
+you back.
+Yeah,
+so in standard lib.h is where Mao is actually declared.
+So let's just add that quickly.
+Let's go ahead and include standard lib.h.
+In addition to standardio.h.
+Let me clear my terminal window,
+rerun,
+make list.
+Enter now we're good.list and phew,
+we see 1234.
+OK,
+so at this point in the story,
+all we've done is write a dopey little
+program that allocates memory for 3 integers 12,
+and 3,
+then changes our mind and allocates more memory.
+4 integers,
+freeing the original chunk of memory after copying the 1st 3
+integers into the new memory and adding that 4th value.
+But this is kind of a lot of hoops to
+jump through and let me propose one refinement here.
+So if back in VS code,
+we go back into list.c here,
+it turns out
+that at least this loop isn't strictly necessary,
+not to mention the fact that we already have another loop for just printing the list.
+If I want to more cleverly reallocate memory,
+it turns out.
+That there's another function that we didn't
+talk about last week but is in Stanlib.H2
+called Reallock,
+which,
+as the name kind of suggests it reallocates memory but a little smarter
+in that it will try to grow your existing chunk of memory if it can,
+which is going to be super efficient because then you
+can just plop the 4 at the very end.
+Or if there just isn't room there because maybe someone else
+put Hello world right there in memory elsewhere in your program,
+it's going to do all of the copying for you.
+So what you get back ultimately.
+A pointer to the new chunk of memory containing all of the original data as well.
+However,
+we're still going to have to check for null.
+We're still going to want to free the original
+list if something goes wrong and then return one.
+We're still going to want to add the 4th value because Realo
+has no idea what more we want to put in the list,
+but I can in fact delete my other 4 loop whose
+purpose in life was just to copy all of those integers
+from old into
+new.
+All right,
+that was a lot.
+Let me pause for any questions.
+How does realo know that it should reallocate the memory in least?
+shouldn't you tell like
+if you have a lot of mas before?
+Very good question.
+That's because I wrote a bug that we didn't trip
+over because I didn't compile this version of the code.
+So the question is how does Reallock know what toreallock?
+Well,
+according to the documentation,
+which I forgot to read,
+you need to tell Reallock
+what the address is of the chunk of memory that you do want to relock.
+So the first argument to re-allock,
+which I did admit.
+forget until a moment ago is to put
+the address of the chunk of memory that you already
+mallocked earlier so that it knows to go there,
+see if there's indeed some garbage values it can reclaim at the end of
+that chunk of memory or if it has to wholesale move things elsewhere in memory
+to give you 4 times the size of the end this time
+instead of just 3.
+But still,
+things can go.
+Wrong.
+Like you still want to check for this null
+value because reallock might not be able to give
+you enough memory or your memory could just be
+so fragmented that even though you want 4 bytes,
+maybe there's 3 bytes over here,
+2 bytes over here,
+1 bye over here.
+If there aren't 4 contiguous bytes,
+real lock 2
+could fail and it will return null to signify as much.
+Other questions on any of this?
+Why do we still need the temp variable for the same reasons as before?
+Because if we just say list equals real lock and something does go wrong,
+real lock by definition will return null
+but not touch the original memory,
+which case we have now lost track of where that original chunk of memory is,
+so we can never go back to it to print it,
+to change it,
+to free it.
+So we have to use this temporary variable here.
+Good question.
+Other questions,
+yeah.

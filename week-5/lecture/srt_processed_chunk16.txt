@@ -1,0 +1,200 @@
+you're still talking about big O of N.
+So here's the tension though,
+like it's absolutely going to be faster.
+It will be like 26 times faster than a linked list,
+but it's still just big O of N because it's going
+to take an amount of time that's still linear in.
+The size of the data set,
+so we seem to have strayed yet again away from our
+constant time search.
+So can we find this holy grail?
+Well,
+we kind of can if you let me spend just like a lot more space.
+There are tries in the world which weirdly is short for retrieval,
+even though we don't say retrieval,
+but a try.
+Is a tree
+made out of arrays,
+right?
+So at some point computer scientists were just like mashing
+things together Frankenstein style like linked lists and arrays,
+and now we've got
+trees and arrays.
+You two can mash something together and come up with your own,
+but let's look at what a try actually is because
+it is going to get us that constant time grail.
+So here is the root of a try.
+You can think of each node in a try as really being an array of values
+A through Z in the case of an English problem like we've been playing with here.
+And what you do is you treat this array
+as being indexed from 0 to 25 or equivalently A through Z,
+and you treat each of those elements as a pointer to another such node in the try.
+And what you do is implicitly store
+the names that you're storing in this data structure
+by
+going to an appropriate location based on the first letter in their name
+and then adding a pointer
+that represents the second letter in their name,
+adding a pointer that represents the third letter of their name,
+and so forth.
+So what do I mean by this?
+Suppose we want to insert
+toad,
+one of the characters from the Nintendo universe,
+first.
+If we count up where T is in the alphabet,
+this.
+A pointer here will be changed from null to a pointer to
+a new node that represents the second letter in Toad's name,
+which is going to be of course O.
+Then to insert TOA we're going to need another node.
+A is going to lead me to D and for uh depiction's sake,
+I'm going to draw it in green even though this would
+actually be a boolean or something like that in memory.
+That indicates that toad's name stops here.
+So in other words,
+this
+try and memory has 4 nodes now.
+Each of those nodes is essentially an array of size 26,
+but the word toad is not actually stored in the data structure explicitly.
+There's no chargerar toad,
+but implicitly because the T pointer is non-null,
+the O pointer is non-null,
+the A pointer is non-null,
+and the D pointer is in fact null at this point is the common technique here.
+This allows me to to insert other
+names from Nintendo's universe like Todet because I
+can continue from here to go to the E node to the T node,
+uh,
+to the T node again,
+and then E node which I'll again mark in green.
+So you can even have names that are
+substrings or equivalently super strings of each other
+by just having all of these various bread crumbs along the way,
+where again a non-null pointer here to a non-null to a.
+Non-null to null pointer here indicates that
+or it can't be null at this point.
+This is where we have to use a boolean indicates that there is a name
+in this data structure that ends here and there's another name that ends here.
+Meanwhile,
+if there's a third name from the universe like Tom,
+same idea,
+but eventually we can start reusing some of these arrays whereby non-null,
+non-null null,
+or there's a boolean flag here that says True,
+a name ends here.
+Now we're reusing that same array.
+So each of the nodes represents the Ith letter of the word or the name you're trying
+to store in the data structure and by playing
+around with null and non-null and some booleans,
+you can implicitly store names in this structure.
+Now it's way too
+pictorially difficult to depict lots and lots of names in this form.
+So just imagine in your mind's eye that there's dozens,
+hundreds,
+thousands of names.
+Now in this data structure but just more arrows and more arrays.
+How do you actually look someone up in this data structure?
+Well,
+if you want to ask a question like I toad in this
+data structure or is to in this data structure or anyone else,
+you can simply start at the root node as we would do for any tree
+and you hash on the first letter of toad's name,
+which gives you this location and you check,
+is it null.
+If not,
+T is implicitly there,
+so you follow that pointer here and then you hash the second letter of
+toad's name and O and check this pointer and you follow that arrow.
+Then you check the third,
+you hash on the third letter of toad's name A and you follow that arrow.
+Then the fourth letter of toad's name D,
+and you see,
+ah,
+there's a boolean here represented in green that
+means toad is in this data structure.
+And notice what's.
+Subtle here it doesn't matter if there's 3 names in
+this try or 3 million names in this try,
+how many steps did it take me to confirm or deny that Toad is in this try?
+1234,
+which is arguably constant,
+even though the names can vary at some
+point there's no Nintendo name longer than what,
+like 10 characters,
+20 characters,
+maybe 30.
+I mean there's some reasonable bound that is finite
+where there's never going to be a name longer
+than that because Nintendo's never going to come up with a crazy long name for a game.
+And so you effectively have constant time for looking up TOAD Todet,
+Tom,
+Mario,
+Luigi,
+Peach,
+any of the other names we've looked at.
+So this is to say a try allows you to ask questions like is Toad
+in this data set or equivalently what is Toad's phone number in this data set,
+because if you assume now that each of these pointers
+ultimately is not just a bull saying yes or no,
+but maybe it's an actual person structure with a name and a number,
+you can
+store even data like that your key value pairs where your
+names are your keys and your phone numbers are your values.
+To make this more clear,
+then here is a data structure,
+how.
+Might represent in
+each of these nodes.
+It's not quite technically just an array.
+It's an array of size 26.
+We'll call it children because it represents the children
+of that node of type struck node star.
+And then here,
+for instance,
+for simplicity is that person's number if we reintroduce numbers and want
+to store in this data structure someone's phone number as well.
+So using that data structure and that kind of
+code,
+you can implement a try
+using something as simple as this.
+Initially your try is just a pointer to a node,
+one such struct.
+We can of course initialize it to null to make clear that there's no names in here,
+but each time we allocate a node,
+we can then add another node,
+another node,
+hashing on the 1st,
+the 2nd,
+the 3rd,
+the 4th,
+the last
+character in the person's name,
+allocating a node as needed,
+flipping that boolean true or false,
+or adding their phone number as a star
+to indicate that we have then found them.
+And so of all the data structures we've looked at today.
+Big O of 1 is actually achieved with tries,
+and yet curiously for problem set 5,
+you're not gonna implement tries,
+you're gonna implement hash tables,
+that's sort of Swiss Army knife of data
+structures that like every programmer everywhere knows about.
+Why?
+Like why not use tries
+very often in practice perhaps.
+Certainly can
+But
+what's the trade-off perhaps?
+Yeah,
+it's a huge amount of memory.
+Things have escalated since the start of class.
+We added,
+we started with 1 inch,
+then we added an in and a pointer and in in 2 pointers.
+Now I'm proposing 26 pointers plus a boolean or a data structure called person.
+I mean,
+it's escalating significantly,
+and the biggest catch with a try,
+as you might have imagined with Toad and To E and Tom on the screen,

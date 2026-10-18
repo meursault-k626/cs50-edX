@@ -15,20 +15,19 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
             int bVal = image[i][j].rgbtBlue;
             int gVal = image[i][j].rgbtGreen;
             int rVal = image[i][j].rgbtRed;
-            
+
             // get the average to determine the grey hue
             int greyish = round((bVal + gVal + rVal) / 3.0);
-            
+
             // reassign the grey hue
             image[i][j].rgbtBlue = greyish;
             image[i][j].rgbtGreen = greyish;
-            image[i][j].rgbtRed = greyish;	    
+            image[i][j].rgbtRed = greyish;
         }
     }
 
     return;
 }
-
 
 // sepia helper
 
@@ -38,7 +37,10 @@ int cap_hue(int sepVal)
     {
         return 255;
     }
-    else{return sepVal;}
+    else
+    {
+        return sepVal;
+    }
 }
 
 // Convert image to sepia
@@ -85,12 +87,11 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
             // Swap pixels
             // width-1-j because 0-start indexing
             RGBTRIPLE og_pixel = image[i][j];
-            image[i][j] = image[i][width-1-j];
-            image[i][width-1-j] = og_pixel;
+            image[i][j] = image[i][width - 1 - j];
+            image[i][width - 1 - j] = og_pixel;
         }
     }
 }
-
 
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
@@ -100,16 +101,23 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 
     for (int i = 0; i < height; i++)
     {
-        for (int j = 0; j < width; j++)        
+        for (int j = 0; j < width; j++)
         {
             copy[i][j].rgbtRed = image[i][j].rgbtRed;
             copy[i][j].rgbtGreen = image[i][j].rgbtGreen;
             copy[i][j].rgbtBlue = image[i][j].rgbtBlue;
+        }
+    }
+
+    for (int i = 0; i < height; i++)
+    {
+        for (int j = 0; j < width; j++)
+        {
             int red_totes = 0;
             int blue_totes = 0;
             int green_totes = 0;
             int adjacent = 0;
-            for (int r = i - 1;  r <= i + 1; r++)
+            for (int r = i - 1; r <= i + 1; r++)
             {
                 for (int s = j - 1; s <= j + 1; s++)
                 {
@@ -133,7 +141,6 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             image[i][j].rgbtRed = cap_hue(blurRed);
             image[i][j].rgbtGreen = cap_hue(blurGreen);
             image[i][j].rgbtBlue = cap_hue(blurBlue);
-
         }
     }
 }

@@ -1,0 +1,200 @@
+the address of the first node.
+Why?
+Because the first node can then get me to the second.
+The second node can then get me to the 3rd,
+and so forth.
+So what's the upside now?
+If I want a 4th value somewhere on the screen,
+I could put it here,
+here,
+here,
+here,
+wherever there's enough room and just make sure that I
+update the arrow to point to that next chunk,
+update the arrow to point to the next chunk.
+There's no copying of data.
+12,
+and 3 can stay there now forever until the program quits,
+and we do actually free it,
+but we can just keep adding,
+adding,
+adding,
+or growing
+this data structure
+in memory.
+So that
+is what the world knows as
+a linked list in Python to which you were essentially
+alluding a list in Python is indeed a linked list.
+Other languages call these vectors,
+but they are essentially arrays that can be grown and shrunken
+automatically,
+effectively without you having to worry quite as much about it.
+So how does the code for implementing something?
+This work.
+Well,
+let me propose that we have this familiar friend of a person which we
+claimed in past weeks has a name and a number associated with them.
+We know from last week that strings are not technically a thing in C as a keyword,
+so that's technically just char,
+star,
+name and number,
+but same idea otherwise,
+and this is what we defined in the past as a person.
+So this is a structure we've seen before.
+I now need to implement the code equivalent of these rectangles,
+each of which has an integer,
+and then a pointer to the next such value.
+So let me propose that we delete what's inside this structure,
+change the name from person to node,
+which again is a generic term for a container of values,
+and let me propose that inside of this new node structure
+we put literally an in for the number we care about.
+There's going to be my 123 or 4,
+and then,
+and this is a little bit
+new.
+Let's include in this structure a pointer
+to the next
+such node.
+It's a pointer in the sense that it's an arrow.
+It's the address of the next node,
+so that's why we say node star.
+I could call it anything I want,
+but semantically calling it next makes perfect
+sense because it's the next such node.
+But this isn't quite right for annoying technical reasons.
+I need to do one other thing here.
+I need to technically,
+and we've not done this before,
+put the name,
+give a temporary name to the structure,
+if you will.
+So literally say struct node here,
+even though I've already said node here.
+Why?
+Because I technically need to change this line to say struct node star.
+Long story short,
+why is this necessary?
+We'll recall in the past C and the compiler reads your code top to bottom,
+left to right.
+Well,
+if we in a previous version of this code,
+we use the word node here,
+but the compiler never sees the word node until down here.
+Like it's just not going to compile because the word literally doesn't exist.
+We saw this with functions in the past,
+so with the solution.
+To that was to put the prototype higher up in the file and then it would compile OK.
+You can think of this as somewhat analogous whereby if I give this structure
+a name on this first line,
+even if it's redundant to this one,
+then I can say struck node inside of these
+curly braces because the compiler has already seen the word
+node there.
+So just you have to do it this way.
+So now that we have this in code,
+we can kind of start playing around with actually storing these things
+in memory.
+So let me propose that
+we go ahead and do this by transitioning back to BS
+code here and let's instead of using our array-based implementation,
+let's implement the first of our link lists,
+and I'm going to be a bit
+extreme and
+pretty much everything inside of Maine.
+I am for convenience now going to include the CS 50 library,
+not so much for the Charar thing,
+but
+because,
+as we discussed last week,
+it's still useful for getting ins and getting strings and other things which unless
+you use ScanF are much harder and more annoying to get and see.
+So let's go ahead and do this outside of Maine,
+let's go ahead and invent.
+this node
+called struck node here.
+Then inside of my curly braces we'll give every such node a number and
+every such node a pointer
+to the next such node,
+and we'll call this whole thing node by convention.
+Then inside of Main,
+let's go ahead and do this one step at a time.
+Let me propose that to create a linked list initially it's empty.
+So how do I represent an empty linked list?
+Well,
+I could call the variable list and set it equal to null,
+but what is the data type for a linked list?
+Well,
+per the picture that we had up earlier,
+insofar as all we need is a single pointer.
+At far left here to represent the address of the first node in the list.
+I dare say all we need to say
+is that our list is of type node star.
+That is to say,
+what is the link list?
+Well,
+it's by definition,
+the address of the first node in the list.
+So that's the first subtlety here.
+So that gives me a picture with no other nodes.
+It just gives me a single pointer initialized to null.
+Now let's go ahead and for parity with the previous example,
+just do something 3 times.
+So in this 4 loop structured exactly as before,
+let's go ahead and allocate.
+New node.
+Ask the user for a number to put inside of it,
+and then start stitching things together so as to
+achieve a picture in memory quite like this.
+So how am I going to do this?
+Well,
+first I need to allocate a new node.
+How do I do that?
+Well,
+I can use our new friend Mallock and allocate the size of
+a node.
+I want to store the address of this chunk of memory somewhere,
+and what I'm going to propose is that we have a temporary variable,
+and I'll call this in.
+Which whose type is that
+of a node star.
+So what am I doing here?
+I'm trying to build up this list in memory
+so that
+I first have a pointer
+to the list.
+I first have a pointer that is null pointing nowhere.
+No list exists.
+I then want to go ahead and create one new node,
+store value in it.
+And then point my list at that node.
+Then I want to do it again
+and again a total of 3 times.
+So how do we do this?
+We allocate space for the size of a node,
+however many bytes that's going to be.
+It's probably going to be 12 because it's 4 for the end and 8 for the pointer,
+but who cares?
+size of will answer that question for me.
+I'm going to store the address of this chunk of memory
+inside of a temporary variable called N for node,
+and that's why it has to be node star,
+because it's going to be pointing to.
+An actual node.
+I'm gonna do my quick sanity check.
+So if N equals equals null,
+we can't proceed further.
+I'm going to go ahead and just return one right now.
+So that's just sort of boilerplate code you should be
+in the habit of doing any time you're using Malock.
+But if all goes well,
+let's do this.
+Let's go to
+the address in N.
+And then go inside of that node
+and change its number to be whatever the human wants it to be
+by using get in and just prompt the human for their favorite number.
+Then let's go to that same node and update the next field to equal for now
+null because all I want to do is allocate one new node with that number.
+That's it.

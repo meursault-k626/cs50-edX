@@ -1,0 +1,200 @@
+but the fact that you can just check a
+value here and then traverse the exact same structure,
+but a subset of it by traversing the left subtree or
+the right subtree is like a beautiful application of recursion.
+And it allows you to uh search for this thing no matter where it is
+in the computer's memory.
+Questions then on this idea of a binary search tree or this actual.
+Code thereof.
+Uh,
+nope.
+If the number is not there,
+we recall.
+So if we get all the way to the bottom of the tree,
+such that now I'm at one of those leaf nodes,
+and that's not the number I'm looking for,
+such that there's no left child left,
+no right child left,
+this conditional is going to kick in and I'm going to return false.
+But if I find it along the way,
+whether it's at the top of the tree or somewhere in the middle or among the leaves,
+I will eventually return
+true.
+Good question.
+And to be clear,
+even though I'm calling this a tree,
+that's true certainly for the first time I call this function
+because I'm passing in a pointer to the whole tree structure.
+But if you think about it,
+what's the left subtree and the right subtree,
+it's just a smaller tree.
+It's like a baby tree that's attached to this parent node,
+so to speak,
+so it's perfectly reasonable to just call the search function with that child
+because it in turn has a whole subtree below it or the right child
+which has the whole subtree
+below it instead.
+All right,
+so I like this direction.
+We've now kind of improved upon link list.
+We've gained back some of our performance because we can
+now find something with big O of log and time.
+I don't love the fact that I'm using 3 times as much memory roughly.
+That feels like kind of a high price to pay just to speed things back up.
+But let's consider whether or not this thing is actually going to
+work as the data structure gets bigger and bigger as well.
+So it looks beautiful here as written,
+and that's.
+Deliberate because I drew the picture like this and it's got 7 elements in it.
+But how did we get to 7 elements?
+Let's start from the beginning.
+Suppose that the tree is initially empty and suppose that
+a human using get into or some other technique inserts
+the first element into the list like the number 2,
+and the goal is to maintain the binary search tree property,
+which means you've got to have it greater than the left child,
+less than the right child.
+So suppose the human using get into or some other.
+Technique next gives me the number 1.
+No big deal.
+I plop it right there.
+Is the left child.
+Suppose they give me the number 3 next,
+no big deal.
+It goes right there.
+I have very deliberately manipulated this story to work
+out beautifully such that the tree is smaller,
+but it's still a binary search tree and nicely balanced,
+so to speak.
+But what if the user,
+for whatever reason just gives me a more perverse
+sequence of inputs like the worst case scenario.
+to give me 3 elements and suppose they give me 1 1st.
+OK,
+that's the root.
+Then they give me 2.
+OK,
+that's cool.
+That's like the right child.
+But what if they then give me 3?
+Well,
+to maintain that binary search property,
+the 3 has to go over here.
+Suppose perversely then they didn't give me 4,
+then 5,
+then 6.
+Imagine in your mind's eye where this story is going.
+What have I accidentally created in memory then?
+A link list which is like bad for all the reasons we
+discussed before the break because even though we're getting the dynamism,
+it's devolving into big O of N.
+So I've kind of manipulated the situation here
+with their original example with 7 elements and
+then 3 elements by making sure that they
+were inserted in just the right order because unless
+you are clever about how you build the tree in memory,
+it could very well devolve from a tree.
+In two dimensions into actually a linked list in one dimension.
+And now this is just a long and stringy tree
+that does not violate the binary search tree definition,
+but it is surely not balanced in this case.
+Now as an aside,
+if you take higher level languages and data structures and algorithms,
+there's many different alternatives to binary search trees
+that actually have baked into the algorithms,
+a little bit of rejiggering of the
+structure so that really
+as soon as you insert this 3.
+You spend a little bit more time and clean the situation
+up and essentially what you do is like pivot the thing around
+this way so that 2 becomes the new root and then 1
+hangs off of it and 3 still hangs off of it.
+So with each insertion or deletion,
+you rebalance the tree as needed,
+which does cost you a bit more time,
+but it avoids the thing devolving into big O of N
+again and we won't do that in code,
+so this is recoverable,
+but not if you implement it naively as I did at least verbally.
+In this story,
+all right,
+well,
+can we do
+better than that?
+Well,
+why might we want to?
+Well,
+at this point in the story,
+it certainly could devolve into big old event,
+and that's not great.
+Certainly for large data sets.
+It's nice that we're back to log in,
+at least if you take on faith that we could kind of
+rebalance this thing as needed and maintain a logarithmic height for it.
+But really the holy grail of data structures is
+to achieve something that is big O of 1,
+like constant time whereby no matter How many numbers
+or names or sweaters are in the data structure,
+it will take just
+1 step or maybe 3 steps,
+right,
+even 100 steps,
+but
+a number of steps
+that is completely independent of how many actual
+pieces of data are in the data structure.
+That is to say over time it doesn't get any slower even if you've got tens,
+hundreds,
+thousands,
+millions of elements in there already.
+So how do we gain something like big O of one constant.
+Time,
+the appeal of which
+is reminiscent of our early picture from week one.
+Like this was our early algorithm for finding someone in
+a phone book or counting students in the room,
+something linear,
+literally straight lines.
+This was the logarithmic curve,
+which especially as you zoom out,
+starts to get very,
+very appealing time wise.
+Something that's constant time looks even prettier.
+It is a straight line at like the one step mark or the two step marks,
+whatever the constant number of step marks is.
+And even though
+Algorithmic will still grow in perpetuity.
+Constant time by definition never changes,
+and this is what we'd really like.
+So when you're searching for someone in your phone,
+you're searching for something on Google,
+you're asking a question of ChatGBT,
+you get an answer like that
+in constant time,
+independent of how much data is actually in there.
+Well,
+let's see how we can do this.
+To do this,
+we're going to at least need a new building block,
+a term of art known as hashing.
+Hashing sort of formally takes an infinite domain of value.
+Use and maps it to a finite range of values.
+So from high school math class,
+domain is the input,
+range is the output.
+So an infinite domain
+to a finite range is the goal here of hashing.
+And we might see this actually in the real world when you're playing,
+you know,
+games or whatnot,
+or you're cleaning up after a game.
+Like here is,
+here are some super jumbo playing cards that we got online and
+suppose that you want to just get these into sorted order.
+You could do this very painstakingly.
+There's 52 cards here.
+You could kind of lay them all.
+Out and start sifting through them and put the 2 over here and
+the 4 over here and the hearts and the clubs and so forth,
+or you can start to look at the cards and bucketize them first to
+take a 52 size problem and maybe shrink it down into 413 byte problems.

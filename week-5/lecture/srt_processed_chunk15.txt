@@ -1,0 +1,200 @@
+So a hash table in short,
+is going to be an array with linked lists,
+as we'll soon see.
+Here's the array 26 pointers to nodes.
+So I'm going to give myself an array of pointers that is
+going to store ultimately a whole bunch of person objects like this.
+So for instance,
+here's a char name,
+Chatar number as we've discussed in the past,
+representing a person.
+These are the pieces of data I might want to store in this data structure.
+However,
+let's simplify it.
+Let's not worry about the phone number because we're not going to call anyone today,
+but for a linked list of persons,
+I'm going to need to store,
+let's say the person's name.
+But also a pointer to the next such name,
+to the next such name to the next such name.
+So again,
+I'm just deleting number as being unnecessary detail,
+but if we're gonna have an array of linked lists,
+this is our new definition of node for this part of class whereby it's not for a tree,
+it's now for a hash table,
+and we'll see this in action now.
+Here's my array of size 2.
+6.
+I drew it vertically,
+but who cares?
+These have always been artists' renditions thereof.
+It just fits nicely on the screen this way.
+This is location 0.
+This is location 25.
+So any A name should end up over here.
+Any Z name should end up down here,
+and so forth.
+Let's just generalize this away as letters of the alphabet for clarity.
+That's where all the names are going to go.
+So hopefully Mario here,
+Luigi here,
+and everyone else.
+So what are each of these squares?
+They're just pointers to nodes initially all null,
+all claim,
+but as soon as I insert Mario into this so-called hash table,
+I'm not going to put him literally here.
+I'm going to create a new node in memory,
+put Mario there,
+and then stitch it together because if I get another M name,
+I'm going to stitch it together and together and together again.
+So for instance,
+here comes Mario into this data structure.
+So this is a pointer to a person structure.
+Here's Luigi and here's a third character.
+As well,
+Peach.
+That's all working out great.
+There's a whole bunch of characters in the Nintendo universe.
+Here's a lot of them.
+Unfortunately,
+especially if you're a fan,
+there's also other names that do start with M and L and other letters of the alphabet.
+So we're poised to have what we're going to call collisions,
+which is a downside of using a hash function.
+If you're going from something infinite to something finite,
+by definition you're going to have a heck of a lot of potential
+collisions somehow,
+multiple M names,
+multiple L names,
+and so forth.
+So we've got a mini.
+This somehow.
+Well,
+if you meet someone in the real world whose name happens
+to start with M and you already are friends with Mario,
+well,
+you could delete Mario from your phone and put that new person there,
+but that's kind of dumb.
+You could clobber the value,
+that is,
+or maybe you put the M friend here,
+and when that fills up,
+you put the M friend here,
+and then when you meet someone else whose name starts with M,
+you put it here.
+But then it just evolves into this mess at which point
+now there's no rhyme or reason as to who is where.
+It devolves back into something linear.
+If you have to search the whole darn thing looking for M
+friends just because you ran out of space where you want.
+So here's the beauty of mashing together in array with a linked list.
+You hash the name to the intended location like box 12 here,
+and then you just start stringing them together in a linked
+list and hopefully you don't have too many of those collisions,
+but at least now you don't have to delete or make a mess of the data structure.
+So here's another bunch of names,
+3 starting with L.
+Here's a bunch for the other letters of the alphabet,
+and it's just a linked,
+it's an array now of linked lists.
+This then is a hash table.
+So the question to consider now,
+is this better than
+an array?
+Is this better than a linked list?
+Well,
+I dare say it's better than a linked list because if it were a linked list from A to Z,
+what would be the running time of searching for anyone?
+Well,
+I'll spoil it,
+big old event because even if it's alphabetically sorted,
+you've got to start at the beginning and go all the way through the list potentially
+to find someone like Zelda whose name starts with,
+of course,
+Z.
+But here,
+we have an array of linked lists.
+So what's really the running time here?
+It's not quite as bad as N steps,
+because if you assume a uniform distribution
+of names such that the world of Nintendo
+maybe has as many M names as L names as A names as B names,
+you could assume that there's a bunch of chains,
+a bunch of linked lists here chained together,
+but they're all roughly the same.
+So maybe you have end names in your phone book this way,
+but there are these lists are only of size,
+they're only 126 of that length because you've got that many names there.
+So what's the running time?
+Well,
+ideally we'd move away from link lists with big O of N
+and achieve our cons.
+In time,
+but
+we have these collisions to worry about here.
+Just to be clear,
+we want to get from big O of N
+to something constant time,
+but we're not going to get to constant time if we've got collisions.
+If we've got 3 L names and a few B names and a few A names,
+we can't just jump to that location.
+And find the person we're looking for.
+So what's the fundamental goal?
+Well,
+I think we want to maybe use a smarter hash function and here depicted
+is an excerpt from a bigger hash table that is a much bigger array
+that assumes that you're not looking at the first letter of everyone's name,
+but apparently what instead.
+The first three letters of the person's name,
+which just decreases the probability of collisions because in this model,
+I dare say there's no one else's name in the Nintendo universe that starts with LIN.
+So now Link has its own location in memory and similarly for
+Luigi LUI I believe is unique in the the Nintendo universe,
+so we don't have a collision.
+Unfortunately,
+while this does seem to eliminate collisions based on this tiny example,
+what's the tradeoff?
+Or what's the catch?
+Uh yeah.
+This is a lot more memory.
+I mean,
+kind of hinted at the fact that I didn't even fit most of it on the screen anymore.
+Here's LAA.
+Here's LUG,
+but what about all of the other letters of
+the alphabet and the other combinations of all possibilities.
+Moreover,
+some of these just don't make much sense,
+at least in English or in the Nintendo world.
+I don't think there's anyone whose name is going to start with AAA or AAB or AAC.
+AA or AA and so forth.
+We're wasting a huge amount of space
+to reduce the probability of collision.
+So that's fine.
+We might get constant time now,
+but at what cost?
+Well,
+a heck of a lot more memory.
+And so this is one of the tensions when using a hash table is you want to
+come up with a good hash function that's maybe
+a little more sophisticated than the first letter,
+but not so wasteful that you need a crazy number of buckets and therefore a huge.
+amount more memory.
+So really,
+even with collisions,
+it's not quite as bad as N steps because technically if you have
+k buckets where k is like 26 buckets or 4 in this case,
+technically if you do assume that the names
+are uniformly distributed over A through Z,
+the English alphabet,
+well,
+each of those linked lists is going to be hopefully no bigger than N divided by K.
+So N divided by 26.
+But what do we know about
+higher order terms when doing big O notation?
+Big O of N divided by K.
+Yes,
+it's faster,
+but asymptotically,
+that is theoretically,

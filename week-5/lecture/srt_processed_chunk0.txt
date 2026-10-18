@@ -1,0 +1,200 @@
+right,
+this is CS 50,
+and this is week 5 already,
+wherein we will focus today on data structures,
+which is a topic we touched on a little bit in in simple form,
+but today we'll dive all the more deeply and
+for better or for worse,
+this is our last week on C.
+next week,
+of course,
+we transition to Python,
+which is a so-called higher level programming language,
+which is really,
+frankly,
+just going to make our lives a lot easier.
+We're going to be able to solve a lot of the same problems,
+but so much more quickly as Humans,
+but not necessarily as we'll see as fast when we run the code as the
+computer might have if we were still using a lower level language like C.
+So indeed thematic over this week and next is going
+to be the theme that we've seen before of trade-offs.
+But before we get there,
+why don't we focus on a couple of data
+structures that you might encounter in the real world,
+namely
+stacks and cues.
+Let's learn some facts about both of these if we could dim
+the lights dramatically.
+Once upon a time there was a guy named Jack.
+When it came to making friends,
+Jack did not have the knack.
+So Jack went to talk to the most popular guy he knew.
+He went up to Lou and asked,
+What do I do?
+Lou saw that his friend was really distressed.
+Well,
+Lou began,
+Just look how you're dressed.
+Don't you have any clothes with a different look?
+Yes,
+said Jack,
+I sure do.
+Come to my house and I'll show them to you.
+So they went off the jacks,
+and Jack showed Lou the box where he kept all his shirts and his pants and his socks.
+Lou said,
+I see you have all your clothes in a pile.
+Why don't you wear some others once in a while?
+Jack said,
+Well,
+when I remove clothes and socks,
+I washed them and put them away in the box.
+Then comes the next morning and up I hop.
+I go to the box and get my clothes off the top.
+Lou quickly realized the problem with Jack.
+He kept clothes,
+CDs,
+and books in a stack.
+When he reached for something to read or to wear,
+he chose the top book or underwear.
+Then when he was done,
+he would put it right back.
+Back it would go on top of the stack.
+I know the solution,
+said a triumphant Lou.
+You need to learn to start using a cue.
+Lou took Jack.
+clothes and hung them in a closet,
+and when he had emptied the box,
+he just tossed it.
+Then he said,
+Now,
+Jack,
+at the end of the day,
+put your clothes on the left when you put them away.
+Then tomorrow morning when you see the sun shine,
+get your clothes from the right,
+from the end of the line.
+Don't you see,
+said Lou,
+it will be so nice.
+You'll wear everything once before you wear something twice.
+And with everything in queues in his closet and shelf,
+Jack started to feel quite sure of himself,
+all thanks to Lou and his wonderful Q.
+All right,
+our thanks to Professor Shannon Duvall at Elon
+University who kindly put together that animation,
+and it's meant to paint a picture of a couple
+of things that we've all encountered in the real world,
+but more technically what we just saw were what are known as abstract data types,
+whereby
+there are data structures in some sense,
+but it's really about the design thereof,
+what characteristics or features or functionality these
+structures offer irrespective of how they are implemented
+in terms of lower level implementation details,
+which is to say you can implement,
+as we'll see,
+cues and stacks in any number.
+Ways which are going to have real world implications for how you can
+actually use them and what kinds of problems you can solve with them.
+So let's consider for instance queues in the first place.
+So a queue is something you sort of experience all the time.
+Any time you go to a store,
+uh,
+go to some event for which you have to line up in a so-called queue,
+you'd ideally like there to be some fairness property about that queue,
+such that if you got in line first,
+you get into the store first.
+You get to check out first or some other such goal.
+Meanwhile,
+the person who got there last actually is at the end of the line.
+is at the end of the line and therefore gets served or enters in at the end.
+So queues have what computer scientists would say is a FIFO property first in,
+first out.
+That is,
+if you're the first person in line,
+you're the first person to get out of line.
+And for many problems that is a good solution,
+certainly if you're concerned with fairness.
+But more technically,
+AQ has what we'll call two operations NQ,
+which is a fancy way of saying getting in line,
+and DQ,
+a fancy way of saying getting out of the line from the front of it.
+But those two operations,
+if Think about it in code.
+Could it be implemented with different actual
+details?
+And by that I mean this.
+Here is one way that we could go about implementing in C code,
+a queue for a bunch of people or persons who want to line up for something.
+So for instance,
+we'll decree that this queue can hold no more than 50 people,
+like that's the physical capacity,
+and then we define
+a structure,
+which we've done a couple of times in the past whereby this structure has
+not only an array of persons that we'll call people and that will be.
+As big as is the capacity,
+so this is an array of size 50 for 50 such persons.
+And then we're going to propose that we also keep track in
+this implementation of a queue of the current size of the queue.
+So we're going to make a distinction between the capacity,
+like how many total people can be there and the size,
+like actually how many people are in line at that moment in time so
+that you know which of the spots in the array are effectively empty,
+and we're going to call that whole structure
+a queue.
+Now the catch with this particular implementation and code of a queue.
+Is what?
+There is inherent in it a limitation,
+something you just kind of have to deal with and I see you nodding.
+What what's your instinct for this?
+For example,
+like if you have like.
+OK,
+well,
+I think you hit the nail on the head in that it's only for 50 students or 50 people,
+which means if a 51st person wants to get into line,
+you literally have no means of remembering them in this data structure.
+So how do you solve that?
+Well,
+we could just recompile our code after changing the 50 to like 51 or maybe 500 or 5000,
+but there there's this trade-off because
+you could still be undershooting the total number of people trying to
+get into maybe a big concert in the case of an extreme,
+but at the same time,
+If you over allocate memory using 5000 locations in memory,
+what if only a few people show up?
+Now you're just wasting memory.
+And certainly at the end of the day you only
+have a finite amount of memory in the computer,
+so you kind of have to decide a priori like before compiling your code,
+how big is this structure going to be,
+how much space you're going to waste,
+and in the end it's all sort of stupid.
+It would be ideal if instead
+we could just grow the queue as needed and shrink it,
+essentially asking the operating system as we
+started doing last week for more memory.
+Giving it back if we don't actually need that memory,
+which is to say can't really do an array in this static sense,
+and by static I mean we're literally deciding in advance at
+compilation time how big this thing is going to be.
+As an aside,
+this is also a bit annoying for implementing a queue because you have
+to somehow keep track of who is at the head of the queue,
+the front of the queue,
+because as you start plucking people off,
+you need to remember who's the next person effectively,
+but there are ways in code that we could solve this.
+So let's consider an alternative to a cue which gives us very different properties,
+namely a stack,
+and we saw that in the animation whereby
+Jack used a stack to put his clothes into a box so that every time he got dressed,
+he sort of took the sweater from the top,
+from the top,
+from the top,

@@ -1,0 +1,200 @@
+So reallock will do two potential things for you.
+So if the computer's memory looks like this,
+you're sort of out of luck because
+Reallock can't give you this bye.
+However,
+if it finds 4 bytes down here,
+for instance,
+Realo will not only allocate those 4 bytes for you,
+it will then copy the data for you over to it,
+which is wonderful because it just means we don't need
+an extra 4 loop all the time we do this.
+Yeah,
+in front.
+How does it know how much data to,
+because how much,
+how does,
+how does Real know how much data to copy because the operating system,
+and you can think of it as the standard library,
+STDLIB.H keeps track of what memory has been allocated
+for you in the past.
+So when you pass in that same address,
+it knows it has essentially a lookup table,
+a dictionary if you will,
+that tells it what memory has been allocated already,
+so you don't have to worry about that.
+Yeah,
+in front.
+Good question.
+In other programming languages,
+you don't always have to declare the length of an array.
+Case in point Python coming next week.
+That is because someone else who invented that programming language
+wrote all of this kind of code for you.
+And indeed that's one of the goals with our
+transition between weeks 5 and 6 is to demonstrate
+that all of these problems are still being solved
+just not by you and not by me anymore.
+We're standing on the shoulder.
+Of other smart people who have invented not just new code
+but like a new language and a new compiler or as we'll
+see an interpreter for it so that we can hide all of
+these lower level details because honestly as you can see already,
+like this is an annoying number of lines of code just to have a conversation about
+the numbers 1234 in Python we could reduce this code to like two lines of code,
+one line of code.
+It's going to be fine.
+All right,
+so with that said,
+among the goals here was to demonstrate that there are a
+bunch of ways in which we can implement these data types,
+but let's talk more concretely about what we'll call data structures,
+which are concrete definitions of how you use the
+computer's memory to lay stuff out in memory,
+and using data structures,
+you can implement stacks and cues and dictionaries and all of these other things.
+So we're going to put into your toolkit today a whole bunch of canonical
+data structures that like every computer scientist
+does and should know that you want.
+Necessarily implement all of the time yourself,
+but when you use some feature of Python or Java or C++ or some other language,
+you are choosing among typically
+implementations of these data structures that someone else has written the
+code for so that you can just benefit from the functionality and
+the features thereof like that FIFO property we talked about or
+LIFO without having to get into the weeds too much yourself.
+So when it comes to
+data structures,
+let's consider that.
+We have at our disposal now a few new pieces of syntax and C,
+and we're going to add just one more today.
+We saw last week that we have the struct keyword,
+and we've seen that for a few weeks now.
+Whenever we want to invent
+our own data structure,
+we can use literally struct.
+We saw in the past that you can use the dot operator
+to actually go inside of a structure to get at a person's name
+or their number,
+and we saw last week the star operator.
+For dereferencing a pointer,
+de-referencing an address to actually go somewhere like inside of a structure.
+Wonderfully today we're going to see that you
+can actually in some cases combine the dot
+and the asterisk into a single operator with
+two characters that literally looks like an arrow,
+and that will help reflect the yellow and black drawings that we've done over the
+past couple of weeks where we have an arrow on the screen pointing somewhere.
+This literal arrow.
+Code is going to line up with that same concept.
+So let's introduce the first of our alternatives to arrays.
+An array again is a contiguous chunk of memory
+where the values are back to back to back.
+Among the upsides so fast because like all of the data is right there.
+We've seen since week 0 you can do binary search and just jump
+around randomly by just doing simple arithmetic to go to the middle,
+the middle of the middle,
+by just dividing by 2 a couple of times and rounding as needed.
+The problem with the arrays,
+to be clear,
+is that they are statically,
+they are statically allocated to be a specific size,
+maybe 3,
+maybe 4,
+but it is a finite value,
+which is problematic because look at all of the code we
+had to write just to resize these things again and again.
+Well,
+what if we sort of try to
+preempt
+that kind of pain
+and
+try to just build up a list by linking it together no matter where.
+the values actually are in memory and move away
+from this constraint that everything has to be contiguous.
+After all,
+as I said a moment ago,
+if the computer has plenty of memory here,
+here,
+here,
+here,
+that collectively is more than enough memory,
+but none of those individual chunks is quite as big as you need for an array,
+well,
+heck,
+let's at least try to leverage all of the available memory and stitch together
+the data structure as opposed to really
+holding firm this constraint that the array.
+Be back to back to back and contiguous.
+So a linked list is something you can now build using that syntax from last week and
+a bit more today in your same canvas of memory so that for the sake of discussion,
+suppose that
+we want to store first in our list the number one.
+Well,
+we all know already that it might very well exist at
+an address like OX 123 for the sake of discussion,
+but it's somewhere there.
+Suppose that you want to store a second value in memory,
+but you didn't think about it initially and so you weren't smart enough to put
+it like right next to the 1 and then the next value next to that.
+But
+you know somehow from Mao or similar functions that you could put the
+number 2 over here at addressOX 456 for the sake of discussion.
+And similarly,
+there's room for the number 3 over here at say address OX 789.
+So already we have a list of values in memory,
+but because they are not continuous,
+you can't just do some trivial plus plus trick to go from
+one to the other because they're differing numbers of bytes apart.
+They're not just back to back one bye.
+So what if we try to solve that problem?
+In the following way,
+instead of just using one byte
+for each of these values,
+let me waste a little bit of memory or spend a little bit of memory
+and have some metadata associated with our data.
+So data is value or values you care about.
+Metadata is data that helps you maintain
+the data you care about.
+So let me propose that we use two chunks of memory for every value,
+such that the top of each of those chunks represents.
+Actual Verro you we care about 12,
+and 3 respectively,
+and you can perhaps see where this is going.
+The second chunk of memory that I've allocated to each of these values
+could perhaps be
+a pointer to the next one,
+a pointer to the next one.
+And if this is the end,
+we can put our old friend OX 0,
+aka null,
+and just treat that as the end of the list implicitly.
+So even though these things could be any
+in memory by just storing with each value the address of the next value in memory,
+creating effectively a treasure map or bread crumbs,
+however you want to think of it metaphorically,
+we can get from one node
+to the other.
+And indeed that's going to be a term of art we start using a node,
+it's just a generic structure that contains data and metadata usually like the
+number you care about and a pointer to the next such node.
+Um,
+these are not to scale as an aside.
+This is typically 4 bytes.
+A pointer,
+as we've discussed,
+is technically 8 bytes,
+but it just looks prettier to draw them as simple squares on the screen.
+So what does this really mean?
+Well,
+who really cares about OX1,
+23456789?
+We can really think of this actually as being more of a picture with arrows,
+but to keep track of this list of three values,
+I do propose that we're going to need one additional value over here,
+and it's deliberately just a single square.
+Because to keep track of this list of three values,
+I'm going to use just one variable
+called say list
+and store in that variable
+a pointer as we defined it last week,
