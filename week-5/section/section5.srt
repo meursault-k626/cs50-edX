@@ -1,0 +1,5367 @@
+0
+00:00:02,109 --> 00:00:06,139
+Welcome to CS 50 week 5 on data structures.
+
+1
+00:00:06,960 --> 00:00:07,760
+My name's Kelly.
+
+2
+00:00:07,820 --> 00:00:09,529
+I'm the preceptor here at Harvard,
+
+3
+00:00:09,800 --> 00:00:10,140
+um,
+
+4
+00:00:10,220 --> 00:00:12,810
+and I'm excited to be leading this section with you guys.
+
+5
+00:00:14,520 --> 00:00:15,010
+OK,
+
+6
+00:00:15,289 --> 00:00:16,318
+so this week,
+
+7
+00:00:16,510 --> 00:00:18,000
+some of the things we talked about
+
+8
+00:00:18,250 --> 00:00:20,479
+um our data structures,
+
+9
+00:00:20,569 --> 00:00:22,840
+what kinds of data structures we can use,
+
+10
+00:00:23,170 --> 00:00:26,420
+and some of the questions that might have come up for you from lecture
+
+11
+00:00:27,010 --> 00:00:27,780
+might include.
+
+12
+00:00:28,790 --> 00:00:31,719
+What are the key trade-offs between data structures
+
+13
+00:00:31,969 --> 00:00:35,040
+that we should consider in decisions about which to use?
+
+14
+00:00:36,389 --> 00:00:40,439
+What are some of the primary operations we should know how to do on a linked list,
+
+15
+00:00:40,560 --> 00:00:43,029
+which is one of the data structures we learned about?
+
+16
+00:00:43,990 --> 00:00:46,590
+And how can we build our very own hash table,
+
+17
+00:00:46,810 --> 00:00:50,069
+which is another one of these data structures that we talked about.
+
+18
+00:00:52,740 --> 00:00:54,650
+So to preface this first bit,
+
+19
+00:00:54,909 --> 00:00:57,740
+we are gonna talk about a lot of different data structures today
+
+20
+00:00:58,069 --> 00:01:04,069
+um but we also wanna try to get a sense of the intuition of when do we use each
+
+21
+00:01:04,069 --> 00:01:06,910
+one and what kinds of things should we think
+
+22
+00:01:06,910 --> 00:01:09,940
+about when we're choosing what data structure to use.
+
+23
+00:01:12,050 --> 00:01:13,099
+So let's imagine
+
+24
+00:01:13,290 --> 00:01:16,529
+this scenario where you work for a company that
+
+25
+00:01:16,529 --> 00:01:20,480
+has created a digital assistant running on a mobile device
+
+26
+00:01:20,690 --> 00:01:21,440
+and so
+
+27
+00:01:22,410 --> 00:01:25,809
+people have been indicating that um some
+
+28
+00:01:25,809 --> 00:01:28,650
+customers are having trouble activating this assistant
+
+29
+00:01:28,889 --> 00:01:32,889
+with its wake word so maybe you're trying to say hello
+
+30
+00:01:33,290 --> 00:01:33,989
+um
+
+31
+00:01:34,370 --> 00:01:39,529
+and then the assistant is supposed to wake up and start listening to the customer.
+
+32
+00:01:40,599 --> 00:01:42,690
+So your team has been asked to ensure
+
+33
+00:01:42,970 --> 00:01:47,739
+that this voice assistant can be awoken with a greater variety of words.
+
+34
+00:01:47,889 --> 00:01:49,459
+So maybe instead of just
+
+35
+00:01:49,730 --> 00:01:50,680
+listening for hello,
+
+36
+00:01:50,690 --> 00:01:52,199
+you also wanna listen for
+
+37
+00:01:52,529 --> 00:01:53,970
+hi or just
+
+38
+00:01:54,330 --> 00:01:55,919
+low or
+
+39
+00:01:56,250 --> 00:01:58,000
+um hello there.
+
+40
+00:01:58,870 --> 00:01:59,699
+And so
+
+41
+00:02:00,970 --> 00:02:03,480
+Given this new um
+
+42
+00:02:04,010 --> 00:02:06,360
+variety of words that we want to capture
+
+43
+00:02:06,360 --> 00:02:09,160
+what data structure would you propose the team build
+
+44
+00:02:09,410 --> 00:02:10,979
+to store these words?
+
+45
+00:02:11,369 --> 00:02:14,660
+So as we talk about these data structures today you
+
+46
+00:02:14,660 --> 00:02:17,529
+can think about in the back of your mind when you're
+
+47
+00:02:17,529 --> 00:02:21,770
+making these kinds of decisions what context are you thinking about
+
+48
+00:02:21,770 --> 00:02:24,960
+and how might that help you choose a data structure.
+
+49
+00:02:26,259 --> 00:02:28,050
+So one thing to keep in mind
+
+50
+00:02:28,350 --> 00:02:29,860
+when choosing a data structure
+
+51
+00:02:30,270 --> 00:02:30,940
+will be
+
+52
+00:02:31,350 --> 00:02:34,539
+what you're gonna actually be using this data structure for,
+
+53
+00:02:34,789 --> 00:02:36,880
+what are the primary operations
+
+54
+00:02:37,149 --> 00:02:41,020
+that are gonna be used and so some common ones could be
+
+55
+00:02:41,270 --> 00:02:41,830
+deletion,
+
+56
+00:02:42,110 --> 00:02:43,029
+insertion,
+
+57
+00:02:43,270 --> 00:02:44,139
+and search.
+
+58
+00:02:44,389 --> 00:02:44,789
+So
+
+59
+00:02:45,190 --> 00:02:46,139
+in this case,
+
+60
+00:02:46,350 --> 00:02:48,220
+deleting words from our list,
+
+61
+00:02:48,509 --> 00:02:48,789
+um,
+
+62
+00:02:48,869 --> 00:02:50,259
+inserting new words
+
+63
+00:02:50,470 --> 00:02:52,270
+and searching for words.
+
+64
+00:02:54,440 --> 00:02:55,199
+And so
+
+65
+00:02:55,509 --> 00:02:56,259
+with these
+
+66
+00:02:56,830 --> 00:02:58,419
+operations that you might want to do,
+
+67
+00:02:58,710 --> 00:03:04,740
+you also might have a prioritization for which ones are gonna be used more often
+
+68
+00:03:04,949 --> 00:03:08,220
+and therefore which ones do we want to be faster
+
+69
+00:03:08,630 --> 00:03:09,710
+um and so
+
+70
+00:03:10,070 --> 00:03:13,100
+one way could be that we prioritize search so
+
+71
+00:03:13,710 --> 00:03:17,119
+we want the searching for a certain word to be really fast
+
+72
+00:03:17,119 --> 00:03:20,500
+or it could be that we're gonna be inserting a lot of words
+
+73
+00:03:20,820 --> 00:03:23,699
+um very often and so we want that to be faster.
+
+74
+00:03:24,789 --> 00:03:28,119
+So it all depends on the context that you are working on.
+
+75
+00:03:29,679 --> 00:03:30,369
+So one
+
+76
+00:03:30,619 --> 00:03:34,250
+way that we could store these words is a linked list.
+
+77
+00:03:34,339 --> 00:03:36,500
+So this is our first data type data structure.
+
+78
+00:03:37,139 --> 00:03:40,960
+And so a linked list would look a little bit like this pictorally.
+
+79
+00:03:41,289 --> 00:03:41,960
+We have
+
+80
+00:03:42,520 --> 00:03:44,240
+some head to
+
+81
+00:03:44,610 --> 00:03:48,360
+multiple nodes and that these nodes are connected to each other.
+
+82
+00:03:49,210 --> 00:03:50,919
+So let's say we're storing hello,
+
+83
+00:03:51,149 --> 00:03:51,649
+hey,
+
+84
+00:03:51,929 --> 00:03:52,759
+low there,
+
+85
+00:03:53,009 --> 00:03:55,369
+and we could be storing more words like that.
+
+86
+00:03:57,460 --> 00:04:00,490
+Another example we have here is a hash table.
+
+87
+00:04:01,139 --> 00:04:02,919
+And so this hash table has
+
+88
+00:04:03,169 --> 00:04:04,190
+multiple buckets,
+
+89
+00:04:04,250 --> 00:04:05,240
+like in this case,
+
+90
+00:04:05,369 --> 00:04:06,639
+these buckets are by
+
+91
+00:04:06,850 --> 00:04:07,800
+the first letter.
+
+92
+00:04:08,699 --> 00:04:10,220
+And then within the bucket,
+
+93
+00:04:10,389 --> 00:04:11,000
+we have
+
+94
+00:04:11,229 --> 00:04:12,380
+a linked list
+
+95
+00:04:12,750 --> 00:04:13,259
+with
+
+96
+00:04:13,750 --> 00:04:14,570
+multiple
+
+97
+00:04:14,830 --> 00:04:15,339
+um
+
+98
+00:04:15,440 --> 00:04:16,230
+entries.
+
+99
+00:04:18,588 --> 00:04:23,989
+Another data structure that we briefly heard about in lecture was a try
+
+100
+00:04:24,299 --> 00:04:25,609
+and so this tri
+
+101
+00:04:25,979 --> 00:04:26,609
+um
+
+102
+00:04:27,019 --> 00:04:29,209
+sort of has this tree like structure
+
+103
+00:04:29,979 --> 00:04:32,148
+that stores these words
+
+104
+00:04:32,419 --> 00:04:33,128
+um
+
+105
+00:04:33,378 --> 00:04:35,088
+in a diagram sort of like this.
+
+106
+00:04:37,709 --> 00:04:37,720
+OK.
+
+107
+00:04:39,329 --> 00:04:43,170
+So we've seen a couple of examples of data structures we can use.
+
+108
+00:04:43,540 --> 00:04:43,970
+Um,
+
+109
+00:04:44,220 --> 00:04:48,529
+now let's think about what trade-offs come with choosing one over the other.
+
+110
+00:04:50,529 --> 00:04:52,910
+So in this week's problems at Speller,
+
+111
+00:04:53,239 --> 00:04:55,750
+we have this this big board
+
+112
+00:04:56,239 --> 00:04:56,790
+um
+
+113
+00:04:57,079 --> 00:04:58,309
+that tracks
+
+114
+00:04:58,600 --> 00:05:01,570
+people's different algorithms based on their hash functions
+
+115
+00:05:01,920 --> 00:05:03,589
+and one thing to note here
+
+116
+00:05:03,880 --> 00:05:04,760
+is that
+
+117
+00:05:05,040 --> 00:05:07,070
+this is a a past year's big board
+
+118
+00:05:07,480 --> 00:05:10,989
+we can see that the fastest implementation here
+
+119
+00:05:11,559 --> 00:05:14,309
+also had the most memory
+
+120
+00:05:14,640 --> 00:05:16,079
+and so usually.
+
+121
+00:05:17,350 --> 00:05:19,470
+These two things time and memory,
+
+122
+00:05:19,769 --> 00:05:22,230
+time and space are the big trade-offs you're gonna be
+
+123
+00:05:22,230 --> 00:05:25,619
+thinking about so you could have something be really fast,
+
+124
+00:05:25,920 --> 00:05:28,470
+but the downside might be that it's gonna
+
+125
+00:05:28,790 --> 00:05:30,339
+take up a lot of space,
+
+126
+00:05:30,630 --> 00:05:30,980
+um,
+
+127
+00:05:30,989 --> 00:05:33,470
+and on the opposite side you could have something that takes
+
+128
+00:05:33,470 --> 00:05:36,299
+up less space but it might take a little bit longer
+
+129
+00:05:36,670 --> 00:05:39,619
+and so that's gonna be a big trade off that you're gonna be thinking about
+
+130
+00:05:40,070 --> 00:05:41,019
+when we're
+
+131
+00:05:41,269 --> 00:05:42,750
+dealing with problems like this.
+
+132
+00:05:44,920 --> 00:05:45,350
+OK.
+
+133
+00:05:46,619 --> 00:05:47,489
+So,
+
+134
+00:05:47,820 --> 00:05:48,690
+to start off,
+
+135
+00:05:48,779 --> 00:05:52,500
+let's begin with talking about a linked list and what
+
+136
+00:05:52,940 --> 00:05:55,529
+that looks like and how to create one for yourself.
+
+137
+00:05:57,190 --> 00:05:57,579
+OK,
+
+138
+00:05:57,779 --> 00:05:59,250
+so the basis of a link list
+
+139
+00:05:59,619 --> 00:06:03,209
+is that we're gonna be connecting a bunch of nodes we call them,
+
+140
+00:06:03,250 --> 00:06:05,190
+and so what actually is a node?
+
+141
+00:06:05,660 --> 00:06:07,450
+So we're gonna define a node
+
+142
+00:06:07,709 --> 00:06:09,809
+like a struct using a struct
+
+143
+00:06:10,100 --> 00:06:11,369
+and within this node
+
+144
+00:06:11,700 --> 00:06:12,730
+in this case
+
+145
+00:06:13,579 --> 00:06:16,420
+where we're trying to store a bunch of different words like hi,
+
+146
+00:06:16,540 --> 00:06:17,250
+hello,
+
+147
+00:06:17,859 --> 00:06:21,339
+we're gonna store a phrase which is a string.
+
+148
+00:06:21,809 --> 00:06:24,799
+And then we're also going to store a pointer
+
+149
+00:06:25,269 --> 00:06:26,750
+to the next node.
+
+150
+00:06:26,989 --> 00:06:30,230
+So this is a pointer to something of a node type.
+
+151
+00:06:30,920 --> 00:06:32,179
+And this address
+
+152
+00:06:32,429 --> 00:06:35,500
+is going to be the address of the node that we'd like
+
+153
+00:06:35,750 --> 00:06:36,989
+it to connect to.
+
+154
+00:06:39,200 --> 00:06:39,690
+So
+
+155
+00:06:39,880 --> 00:06:42,230
+this defines us uh a node
+
+156
+00:06:43,119 --> 00:06:43,670
+type
+
+157
+00:06:44,040 --> 00:06:45,750
+we're storing some sort of phrase here
+
+158
+00:06:46,040 --> 00:06:46,720
+like hi.
+
+159
+00:06:47,799 --> 00:06:52,230
+And then we're also storing what might be the address of the next node.
+
+160
+00:06:54,920 --> 00:06:55,260
+OK,
+
+161
+00:06:55,459 --> 00:06:57,450
+so how do we go about creating a linked list?
+
+162
+00:06:57,660 --> 00:06:58,850
+So we've created a node,
+
+163
+00:06:59,179 --> 00:07:00,450
+how do we make this a list?
+
+164
+00:07:02,480 --> 00:07:03,519
+So to start out with,
+
+165
+00:07:03,559 --> 00:07:05,989
+we might have this list called
+
+166
+00:07:06,309 --> 00:07:07,109
+list
+
+167
+00:07:07,559 --> 00:07:08,170
+and
+
+168
+00:07:08,399 --> 00:07:11,709
+basically we have a pointer to a node
+
+169
+00:07:12,040 --> 00:07:16,440
+and currently it's just gonna equal null we haven't created any nodes yet.
+
+170
+00:07:17,489 --> 00:07:19,179
+And so it's just gonna equal,
+
+171
+00:07:19,299 --> 00:07:20,369
+it's gonna point to null
+
+172
+00:07:20,589 --> 00:07:21,100
+for now.
+
+173
+00:07:22,489 --> 00:07:24,100
+And then what we want to do here
+
+174
+00:07:24,309 --> 00:07:25,380
+is actually
+
+175
+00:07:25,750 --> 00:07:27,269
+malock a node.
+
+176
+00:07:28,480 --> 00:07:31,019
+So we're gonna ask the computer for
+
+177
+00:07:31,250 --> 00:07:34,559
+um however much space a node needs
+
+178
+00:07:35,250 --> 00:07:37,559
+and malllock that and that's gonna return
+
+179
+00:07:37,890 --> 00:07:38,959
+the address
+
+180
+00:07:39,429 --> 00:07:42,170
+of whatever memory was just mallocked.
+
+181
+00:07:44,619 --> 00:07:45,290
+Then
+
+182
+00:07:45,619 --> 00:07:48,440
+we're creating some pointer called N here
+
+183
+00:07:48,779 --> 00:07:49,369
+and that
+
+184
+00:07:49,500 --> 00:07:51,609
+N is gonna point to that new
+
+185
+00:07:51,869 --> 00:07:54,750
+um piece of memory that we just allocated.
+
+186
+00:07:57,579 --> 00:07:58,589
+So
+
+187
+00:07:58,880 --> 00:08:04,130
+using our struct notation I can then give it the phrase high
+
+188
+00:08:04,640 --> 00:08:06,269
+which is we know a string
+
+189
+00:08:06,640 --> 00:08:08,630
+and then what do we think
+
+190
+00:08:09,279 --> 00:08:10,390
+the next
+
+191
+00:08:10,920 --> 00:08:15,390
+value should be what address should it point to if this is the only thing
+
+192
+00:08:15,839 --> 00:08:17,390
+in my list so far.
+
+193
+00:08:19,730 --> 00:08:20,820
+Any ideas?
+
+194
+00:08:25,010 --> 00:08:26,369
+Feel free to put in the chat.
+
+195
+00:08:27,320 --> 00:08:30,850
+If this is if this is my only note in the list so far,
+
+196
+00:08:31,179 --> 00:08:34,010
+what should that next address point to?
+
+197
+00:08:41,140 --> 00:08:41,369
+Yeah,
+
+198
+00:08:41,530 --> 00:08:43,440
+so it would be the next address,
+
+199
+00:08:43,650 --> 00:08:45,239
+but if I don't have another node,
+
+200
+00:08:45,530 --> 00:08:47,080
+then exactly it should be
+
+201
+00:08:47,369 --> 00:08:49,090
+pointing to null.
+
+202
+00:08:49,940 --> 00:08:50,919
+So
+
+203
+00:08:51,119 --> 00:08:52,469
+this indicates that
+
+204
+00:08:52,799 --> 00:08:53,510
+my
+
+205
+00:08:54,200 --> 00:08:58,409
+list is only this one node long and that there's no node
+
+206
+00:08:58,840 --> 00:09:00,119
+that comes after
+
+207
+00:09:00,409 --> 00:09:01,030
+my
+
+208
+00:09:01,280 --> 00:09:02,260
+end node.
+
+209
+00:09:04,619 --> 00:09:05,460
+So then I'm gonna,
+
+210
+00:09:05,559 --> 00:09:07,270
+I'm gonna reassign list to end
+
+211
+00:09:07,969 --> 00:09:08,950
+so that this
+
+212
+00:09:09,239 --> 00:09:11,309
+is now the head of my list.
+
+213
+00:09:11,799 --> 00:09:13,440
+So I have a list which is a pointer,
+
+214
+00:09:13,760 --> 00:09:15,789
+pointing to the head of my list.
+
+215
+00:09:18,049 --> 00:09:18,669
+OK,
+
+216
+00:09:18,869 --> 00:09:23,340
+so I'll pause here if we have any questions about
+
+217
+00:09:23,630 --> 00:09:24,780
+creating a linked list,
+
+218
+00:09:25,010 --> 00:09:26,260
+what to know it is,
+
+219
+00:09:26,950 --> 00:09:27,309
+etc.
+
+220
+00:09:30,830 --> 00:09:32,570
+So someone asked what is a node,
+
+221
+00:09:32,770 --> 00:09:34,039
+so we defined the node.
+
+222
+00:09:35,010 --> 00:09:35,500
+Here
+
+223
+00:09:35,760 --> 00:09:37,880
+with this notation here,
+
+224
+00:09:38,130 --> 00:09:41,000
+so it's a struct that we've called node
+
+225
+00:09:41,409 --> 00:09:45,030
+and within the node we're storing a phrase which is a string
+
+226
+00:09:45,409 --> 00:09:47,890
+and then an address to a node.
+
+227
+00:09:48,969 --> 00:09:50,460
+Which is called Next.
+
+228
+00:09:56,289 --> 00:09:56,700
+OK.
+
+229
+00:09:57,780 --> 00:09:59,409
+Any other questions so far?
+
+230
+00:10:04,330 --> 00:10:04,919
+OK,
+
+231
+00:10:05,320 --> 00:10:05,979
+well if any come up,
+
+232
+00:10:06,049 --> 00:10:07,080
+feel free to put them
+
+233
+00:10:07,690 --> 00:10:08,200
+in
+
+234
+00:10:08,489 --> 00:10:11,400
+and so we're gonna get some hands-on practice
+
+235
+00:10:11,729 --> 00:10:14,690
+with this and create a program called List.c
+
+236
+00:10:14,929 --> 00:10:18,270
+that creates a linked list of three numbers.
+
+237
+00:10:18,690 --> 00:10:19,119
+So
+
+238
+00:10:19,450 --> 00:10:20,599
+in this example,
+
+239
+00:10:20,770 --> 00:10:23,960
+we're going to be using numbers that are stored as a linked list
+
+240
+00:10:24,409 --> 00:10:28,159
+and we're going to define a struct called node similar to what we just saw,
+
+241
+00:10:28,369 --> 00:10:31,049
+which stores an integer and a pointer to the next node.
+
+242
+00:10:31,690 --> 00:10:32,750
+In the main function,
+
+243
+00:10:32,880 --> 00:10:35,559
+we're going to prompt the user for 3 numbers
+
+244
+00:10:35,960 --> 00:10:38,880
+and dynamically allocate memory for each
+
+245
+00:10:39,190 --> 00:10:40,280
+new node.
+
+246
+00:10:41,830 --> 00:10:42,270
+OK,
+
+247
+00:10:42,429 --> 00:10:44,780
+so we're gonna move here to
+
+248
+00:10:46,369 --> 00:10:46,840
+C 50.
+
+249
+00:10:47,530 --> 00:10:47,849
+OK,
+
+250
+00:10:48,049 --> 00:10:48,409
+cool.
+
+251
+00:10:49,619 --> 00:10:51,479
+I'm just gonna restart my code space.
+
+252
+00:11:02,669 --> 00:11:04,109
+1 2nd.
+
+253
+00:11:09,789 --> 00:11:10,609
+OK.
+
+254
+00:11:16,049 --> 00:11:16,059
+OK,
+
+255
+00:11:16,840 --> 00:11:17,780
+I think we're
+
+256
+00:11:18,190 --> 00:11:18,869
+set up now.
+
+257
+00:11:18,960 --> 00:11:19,289
+OK,
+
+258
+00:11:19,359 --> 00:11:20,440
+I'm gonna close.
+
+259
+00:11:21,460 --> 00:11:22,210
+This
+
+260
+00:11:24,330 --> 00:11:24,739
+Oops.
+
+261
+00:11:31,919 --> 00:11:32,559
+OK,
+
+262
+00:11:32,830 --> 00:11:33,559
+we're all set.
+
+263
+00:11:34,799 --> 00:11:36,229
+So I'm gonna first start out
+
+264
+00:11:36,359 --> 00:11:38,750
+by just including some libraries.
+
+265
+00:11:39,669 --> 00:11:42,710
+So I know I'm gonna get some input from the user,
+
+266
+00:11:42,989 --> 00:11:44,869
+so I'm gonna include CS5T.H.
+
+267
+00:11:46,049 --> 00:11:46,869
+And then
+
+268
+00:11:48,590 --> 00:11:52,229
+What are some other libraries that I know I'm gonna need here?
+
+269
+00:11:56,070 --> 00:11:57,940
+Feel free to just write them in the chat.
+
+270
+00:12:01,369 --> 00:12:01,599
+Yeah,
+
+271
+00:12:01,760 --> 00:12:03,950
+definitely need standard.O.H,
+
+272
+00:12:03,960 --> 00:12:04,909
+so I'm gonna include that.
+
+273
+00:12:06,179 --> 00:12:08,109
+And then I'm also going to need standard.
+
+274
+00:12:09,190 --> 00:12:10,789
+Lib exactly.
+
+275
+00:12:11,030 --> 00:12:11,419
+Great.
+
+276
+00:12:11,789 --> 00:12:12,219
+OK,
+
+277
+00:12:12,309 --> 00:12:14,510
+and so my first point here.
+
+278
+00:12:15,250 --> 00:12:16,539
+I need to know
+
+279
+00:12:16,830 --> 00:12:17,859
+what a node is,
+
+280
+00:12:17,989 --> 00:12:21,900
+so I'm gonna have to define a node similar to what we just saw earlier.
+
+281
+00:12:22,700 --> 00:12:23,979
+So I'm gonna use my
+
+282
+00:12:24,219 --> 00:12:25,900
+type destruct notation.
+
+283
+00:12:27,049 --> 00:12:29,200
+To create what we're calling a node here.
+
+284
+00:12:31,979 --> 00:12:32,619
+And then
+
+285
+00:12:33,780 --> 00:12:35,549
+What were the
+
+286
+00:12:35,820 --> 00:12:38,539
+things I wanted to include inside of my node?
+
+287
+00:12:42,000 --> 00:12:43,219
+In the example we talked about,
+
+288
+00:12:43,229 --> 00:12:45,219
+we had a string that we were saving,
+
+289
+00:12:45,570 --> 00:12:46,099
+but in this case,
+
+290
+00:12:46,109 --> 00:12:48,179
+we want to save some numbers
+
+291
+00:12:48,960 --> 00:12:49,419
+instead.
+
+292
+00:12:50,210 --> 00:12:50,440
+Yeah,
+
+293
+00:12:50,559 --> 00:12:53,520
+so I'm definitely gonna need a pointer to the next node.
+
+294
+00:12:56,520 --> 00:12:57,840
+But then I also want.
+
+295
+00:12:59,020 --> 00:13:00,640
+Instead of a phrase,
+
+296
+00:13:00,760 --> 00:13:00,880
+yeah,
+
+297
+00:13:00,960 --> 00:13:02,190
+an integer,
+
+298
+00:13:02,760 --> 00:13:04,429
+I'm just gonna call a number.
+
+299
+00:13:05,359 --> 00:13:06,210
+And then
+
+300
+00:13:06,409 --> 00:13:07,450
+I also want.
+
+301
+00:13:08,820 --> 00:13:09,609
+Pointer
+
+302
+00:13:09,940 --> 00:13:11,020
+to the next note,
+
+303
+00:13:11,140 --> 00:13:12,289
+so I'm gonna call that
+
+304
+00:13:12,539 --> 00:13:13,090
+next.
+
+305
+00:13:14,270 --> 00:13:14,729
+OK,
+
+306
+00:13:14,859 --> 00:13:15,369
+great.
+
+307
+00:13:15,619 --> 00:13:18,619
+And so now I'm gonna set up my in my main function.
+
+308
+00:13:21,619 --> 00:13:21,640
+All right.
+
+309
+00:13:24,659 --> 00:13:24,669
+So
+
+310
+00:13:26,479 --> 00:13:29,380
+I know that I'm gonna be getting input 3 times.
+
+311
+00:13:29,869 --> 00:13:31,469
+I also know I want to set up
+
+312
+00:13:31,669 --> 00:13:32,619
+my link list.
+
+313
+00:13:32,950 --> 00:13:35,909
+So first I'm just gonna create that initial.
+
+314
+00:13:37,429 --> 00:13:41,219
+List pointer that points to the head of my list and so list
+
+315
+00:13:41,469 --> 00:13:44,539
+is gonna be referring to the head of my list
+
+316
+00:13:44,989 --> 00:13:46,419
+no matter what I do to it.
+
+317
+00:13:48,320 --> 00:13:50,159
+And for now I'm just gonna set that to null,
+
+318
+00:13:50,270 --> 00:13:52,340
+since I haven't allocated any nodes yet,
+
+319
+00:13:52,669 --> 00:13:54,270
+it's just gonna be empty.
+
+320
+00:13:55,940 --> 00:13:56,599
+OK,
+
+321
+00:13:57,039 --> 00:13:59,309
+now how should I go about getting
+
+322
+00:13:59,820 --> 00:14:00,510
+3
+
+323
+00:14:00,880 --> 00:14:03,000
+numbers input from the user?
+
+324
+00:14:04,280 --> 00:14:05,530
+Any ideas?
+
+325
+00:14:09,780 --> 00:14:11,359
+I could do like number one.
+
+326
+00:14:12,390 --> 00:14:13,039
+Get in
+
+327
+00:14:14,210 --> 00:14:15,000
+2.
+
+328
+00:14:16,609 --> 00:14:17,640
+But is this,
+
+329
+00:14:17,929 --> 00:14:19,859
+is this the most efficient implementation?
+
+330
+00:14:21,179 --> 00:14:21,719
+Yeah,
+
+331
+00:14:21,840 --> 00:14:22,000
+yeah,
+
+332
+00:14:22,159 --> 00:14:23,330
+so I should use a loop.
+
+333
+00:14:23,679 --> 00:14:25,789
+I know I'm gonna do it 3 times,
+
+334
+00:14:25,919 --> 00:14:26,469
+so
+
+335
+00:14:27,039 --> 00:14:27,799
+I'm gonna say.
+
+336
+00:14:28,880 --> 00:14:30,070
+I less than 3
+
+337
+00:14:31,590 --> 00:14:32,130
+plus plus.
+
+338
+00:14:32,169 --> 00:14:33,789
+So we're gonna loop 3 times
+
+339
+00:14:34,049 --> 00:14:35,520
+and each time I'm gonna
+
+340
+00:14:36,010 --> 00:14:37,409
+get a new integer.
+
+341
+00:14:37,650 --> 00:14:38,729
+Let's just call it X.
+
+342
+00:14:40,520 --> 00:14:41,570
+Using get it,
+
+343
+00:14:41,719 --> 00:14:43,039
+I'm gonna ask for.
+
+344
+00:14:43,719 --> 00:14:45,229
+A new number.
+
+345
+00:14:46,799 --> 00:14:47,239
+OK.
+
+346
+00:14:49,200 --> 00:14:49,950
+Now,
+
+347
+00:14:50,820 --> 00:14:51,969
+Once I have
+
+348
+00:14:52,260 --> 00:14:53,369
+gotten this number.
+
+349
+00:14:55,229 --> 00:14:57,359
+How do I go about
+
+350
+00:14:57,570 --> 00:14:59,080
+creating a node for it?
+
+351
+00:15:05,049 --> 00:15:07,570
+So what do I need to do when I create a new node?
+
+352
+00:15:15,609 --> 00:15:16,859
+I know it's gonna be
+
+353
+00:15:17,390 --> 00:15:18,229
+no star.
+
+354
+00:15:19,229 --> 00:15:19,500
+Yeah,
+
+355
+00:15:19,619 --> 00:15:21,619
+and I'm gonna mallo so I'm gonna need
+
+356
+00:15:22,099 --> 00:15:22,929
+new memory
+
+357
+00:15:23,099 --> 00:15:24,169
+to store this note in,
+
+358
+00:15:24,219 --> 00:15:24,890
+so I'm gonna
+
+359
+00:15:25,299 --> 00:15:26,450
+call this in.
+
+360
+00:15:28,619 --> 00:15:29,840
+And I'm gonna use Mao
+
+361
+00:15:30,650 --> 00:15:31,280
+to get.
+
+362
+00:15:32,020 --> 00:15:34,000
+The size of a node.
+
+363
+00:15:35,190 --> 00:15:36,960
+So this amount of space
+
+364
+00:15:37,179 --> 00:15:37,799
+from
+
+365
+00:15:38,450 --> 00:15:39,130
+the computer.
+
+366
+00:15:40,239 --> 00:15:40,770
+OK.
+
+367
+00:15:44,099 --> 00:15:45,700
+That's all good and then.
+
+368
+00:15:46,510 --> 00:15:48,820
+If we recall from a lecture,
+
+369
+00:15:49,190 --> 00:15:51,260
+what do I always need to do
+
+370
+00:15:51,510 --> 00:15:52,559
+when I'm Matlock?
+
+371
+00:15:55,409 --> 00:15:56,309
+So
+
+372
+00:15:56,520 --> 00:15:56,640
+yeah,
+
+373
+00:15:56,799 --> 00:15:57,799
+someone says check for an all,
+
+374
+00:15:57,880 --> 00:15:58,270
+yeah,
+
+375
+00:15:58,520 --> 00:15:58,960
+so.
+
+376
+00:16:00,599 --> 00:16:02,640
+When I ask for a certain amount of memory.
+
+377
+00:16:03,669 --> 00:16:07,840
+This is going to return to me a pointer of where that memory lives,
+
+378
+00:16:08,190 --> 00:16:08,619
+but
+
+379
+00:16:08,830 --> 00:16:12,900
+in the case that the computer maybe doesn't have enough memory to give me,
+
+380
+00:16:13,349 --> 00:16:15,349
+it's just gonna return null.
+
+381
+00:16:16,719 --> 00:16:18,830
+So it might be good to check here
+
+382
+00:16:19,440 --> 00:16:20,219
+if N
+
+383
+00:16:20,520 --> 00:16:21,510
+is null.
+
+384
+00:16:24,510 --> 00:16:25,559
+And in this case,
+
+385
+00:16:25,609 --> 00:16:28,239
+I should just like stop the program because
+
+386
+00:16:28,609 --> 00:16:30,969
+the program is not gonna go the way that I
+
+387
+00:16:30,969 --> 00:16:33,359
+wanted to because I don't have enough space here.
+
+388
+00:16:34,419 --> 00:16:35,659
+So I can return one.
+
+389
+00:16:37,929 --> 00:16:38,510
+And
+
+390
+00:16:39,500 --> 00:16:41,809
+Maybe I can just print off some sort of
+
+391
+00:16:42,140 --> 00:16:43,809
+error here like
+
+392
+00:16:44,419 --> 00:16:45,460
+my lock failed.
+
+393
+00:16:51,869 --> 00:16:52,510
+OK,
+
+394
+00:16:52,679 --> 00:16:52,979
+great.
+
+395
+00:16:54,520 --> 00:16:56,349
+Any initial questions
+
+396
+00:16:56,700 --> 00:16:57,880
+about this?
+
+397
+00:16:58,789 --> 00:17:00,549
+We've defined a node here.
+
+398
+00:17:01,590 --> 00:17:04,500
+We're looping 3 times and creating 3
+
+399
+00:17:04,790 --> 00:17:05,630
+nodes.
+
+400
+00:17:08,540 --> 00:17:08,729
+Yeah,
+
+401
+00:17:08,890 --> 00:17:09,410
+someone asks,
+
+402
+00:17:09,489 --> 00:17:11,680
+does the number 3 here in the 4 loop,
+
+403
+00:17:12,050 --> 00:17:12,380
+uh,
+
+404
+00:17:12,489 --> 00:17:15,479
+is that a magic number or is it fine to hard code that?
+
+405
+00:17:15,810 --> 00:17:16,030
+Yeah,
+
+406
+00:17:16,130 --> 00:17:17,040
+that's a great question,
+
+407
+00:17:17,050 --> 00:17:19,560
+and this is a really good like design question as well.
+
+408
+00:17:19,969 --> 00:17:22,239
+Normally I would say that when you're
+
+409
+00:17:22,489 --> 00:17:23,400
+using these
+
+410
+00:17:23,650 --> 00:17:25,880
+numbers that seem sort of arbitrary,
+
+411
+00:17:26,209 --> 00:17:26,479
+um,
+
+412
+00:17:26,489 --> 00:17:28,920
+it's better to to find that as a constant,
+
+413
+00:17:29,170 --> 00:17:29,520
+um,
+
+414
+00:17:29,650 --> 00:17:31,479
+since this is just a quick example,
+
+415
+00:17:31,689 --> 00:17:32,250
+I'm
+
+416
+00:17:32,410 --> 00:17:33,319
+not gonna do that,
+
+417
+00:17:33,520 --> 00:17:36,030
+but that that's great intuition for
+
+418
+00:17:36,569 --> 00:17:37,969
+completing the problem sets.
+
+419
+00:17:44,930 --> 00:17:45,369
+Someone says,
+
+420
+00:17:45,410 --> 00:17:47,130
+what if the error was in the middle of the floor
+
+421
+00:17:47,530 --> 00:17:48,359
+with the
+
+422
+00:17:48,650 --> 00:17:49,920
+already allocated memory?
+
+423
+00:17:50,410 --> 00:17:51,050
+Yeah,
+
+424
+00:17:51,250 --> 00:17:51,369
+yeah,
+
+425
+00:17:51,489 --> 00:17:52,520
+that's a great,
+
+426
+00:17:52,930 --> 00:17:53,810
+that's a great point.
+
+427
+00:17:55,030 --> 00:17:55,839
+And so
+
+428
+00:17:57,650 --> 00:17:58,310
+Yeah,
+
+429
+00:17:58,599 --> 00:18:00,910
+what we might actually want to do is
+
+430
+00:18:01,599 --> 00:18:03,550
+remove this for now and leave the freeing
+
+431
+00:18:04,040 --> 00:18:05,300
+for later
+
+432
+00:18:06,000 --> 00:18:08,000
+down in the function so that we know.
+
+433
+00:18:09,670 --> 00:18:10,469
+Where to free.
+
+434
+00:18:11,270 --> 00:18:11,609
+But yeah,
+
+435
+00:18:11,729 --> 00:18:12,640
+that's a great question.
+
+436
+00:18:14,630 --> 00:18:15,229
+OK.
+
+437
+00:18:16,760 --> 00:18:17,069
+OK,
+
+438
+00:18:17,229 --> 00:18:20,540
+so we're gonna talk now about inserting nodes
+
+439
+00:18:21,030 --> 00:18:21,750
+to a linked list.
+
+440
+00:18:21,869 --> 00:18:23,589
+Right now we just have some floating nodes,
+
+441
+00:18:23,630 --> 00:18:25,290
+but we don't have it actually
+
+442
+00:18:25,790 --> 00:18:26,859
+linked together.
+
+443
+00:18:29,170 --> 00:18:29,609
+So
+
+444
+00:18:30,939 --> 00:18:32,859
+Once we've created this new node.
+
+445
+00:18:34,500 --> 00:18:37,270
+So let's say we're creating a second note here called N.
+
+446
+00:18:38,369 --> 00:18:40,459
+And then we give it praise.
+
+447
+00:18:41,369 --> 00:18:42,109
+And then
+
+448
+00:18:42,900 --> 00:18:44,209
+to link it now,
+
+449
+00:18:44,540 --> 00:18:46,300
+we've set the next pointer.
+
+450
+00:18:47,339 --> 00:18:48,550
+To our head.
+
+451
+00:18:49,439 --> 00:18:52,010
+Of the list which is called list.
+
+452
+00:18:54,599 --> 00:18:56,969
+And then once that
+
+453
+00:18:57,349 --> 00:19:00,939
+next value is set to the next node,
+
+454
+00:19:01,270 --> 00:19:03,979
+that means I can reassign the head of the list,
+
+455
+00:19:03,989 --> 00:19:04,670
+which is N.
+
+456
+00:19:05,550 --> 00:19:06,099
+To
+
+457
+00:19:06,270 --> 00:19:07,660
+this newly allocated node,
+
+458
+00:19:07,709 --> 00:19:08,760
+which is now the head.
+
+459
+00:19:10,739 --> 00:19:11,150
+OK.
+
+460
+00:19:12,310 --> 00:19:13,449
+So now let's
+
+461
+00:19:13,810 --> 00:19:15,739
+do that in practice.
+
+462
+00:19:18,719 --> 00:19:19,140
+OK.
+
+463
+00:19:20,380 --> 00:19:22,619
+So I've created a node here.
+
+464
+00:19:25,050 --> 00:19:25,890
+And now
+
+465
+00:19:26,750 --> 00:19:30,689
+I should probably give it the number that I actually got from the user here,
+
+466
+00:19:30,770 --> 00:19:31,010
+right?
+
+467
+00:19:31,089 --> 00:19:32,819
+So I'm gonna do N
+
+468
+00:19:33,390 --> 00:19:33,880
+number.
+
+469
+00:19:35,410 --> 00:19:36,599
+Set that equal to X.
+
+470
+00:19:38,050 --> 00:19:40,609
+And then the next value
+
+471
+00:19:41,410 --> 00:19:42,219
+should be.
+
+472
+00:19:43,800 --> 00:19:44,729
+What tier?
+
+473
+00:19:55,550 --> 00:19:55,680
+Yeah,
+
+474
+00:19:55,869 --> 00:19:56,339
+list.
+
+475
+00:19:58,290 --> 00:19:59,959
+And so for the first node.
+
+476
+00:20:00,839 --> 00:20:02,069
+When list is null,
+
+477
+00:20:02,199 --> 00:20:04,560
+that also makes sense here since we're just
+
+478
+00:20:05,079 --> 00:20:05,930
+going to
+
+479
+00:20:06,199 --> 00:20:09,050
+insert this new node and set that next pointer.
+
+480
+00:20:10,260 --> 00:20:10,619
+OK,
+
+481
+00:20:10,739 --> 00:20:11,300
+great.
+
+482
+00:20:11,540 --> 00:20:13,150
+And then what do I have to do?
+
+483
+00:20:13,989 --> 00:20:16,180
+To reset the head of the list.
+
+484
+00:20:17,739 --> 00:20:18,229
+To the
+
+485
+00:20:19,319 --> 00:20:22,150
+Pointer or to the know that we just created.
+
+486
+00:20:27,959 --> 00:20:29,150
+Sections list.
+
+487
+00:20:32,050 --> 00:20:33,800
+Equal to and,
+
+488
+00:20:33,969 --> 00:20:34,170
+yeah,
+
+489
+00:20:34,369 --> 00:20:34,890
+exactly.
+
+490
+00:20:35,859 --> 00:20:36,760
+Exactly so.
+
+491
+00:20:38,180 --> 00:20:40,459
+Here we've created a new node called N.
+
+492
+00:20:41,290 --> 00:20:42,199
+We've given it a number,
+
+493
+00:20:42,209 --> 00:20:44,290
+we've set the next pointer.
+
+494
+00:20:45,130 --> 00:20:48,550
+And then here we can reassign this head of the list
+
+495
+00:20:48,890 --> 00:20:49,849
+to that
+
+496
+00:20:50,290 --> 00:20:51,510
+no that we just created.
+
+497
+00:20:53,030 --> 00:20:53,390
+OK,
+
+498
+00:20:53,619 --> 00:20:53,869
+great.
+
+499
+00:20:57,329 --> 00:20:57,790
+OK,
+
+500
+00:20:57,930 --> 00:20:58,800
+so after we've
+
+501
+00:20:59,010 --> 00:20:59,849
+set that up.
+
+502
+00:21:00,750 --> 00:21:02,119
+We need to talk about free notes,
+
+503
+00:21:02,260 --> 00:21:02,510
+right,
+
+504
+00:21:02,589 --> 00:21:02,979
+so.
+
+505
+00:21:04,099 --> 00:21:05,060
+We talked about
+
+506
+00:21:05,339 --> 00:21:07,050
+um when you malock something,
+
+507
+00:21:07,300 --> 00:21:08,170
+you always
+
+508
+00:21:08,380 --> 00:21:11,770
+need to also free that memory afterwards.
+
+509
+00:21:13,880 --> 00:21:14,900
+And so how do we do that?
+
+510
+00:21:17,270 --> 00:21:19,910
+So naively maybe I try this method,
+
+511
+00:21:19,989 --> 00:21:22,339
+but what is wrong with freeing
+
+512
+00:21:22,630 --> 00:21:23,780
+just list here?
+
+513
+00:21:34,979 --> 00:21:35,239
+Right,
+
+514
+00:21:35,400 --> 00:21:36,760
+so this other node.
+
+515
+00:21:37,530 --> 00:21:38,540
+Hasn't been freed.
+
+516
+00:21:39,859 --> 00:21:42,219
+And it's also not accessible anymore
+
+517
+00:21:42,520 --> 00:21:42,869
+since
+
+518
+00:21:43,150 --> 00:21:44,780
+this node that we just freed
+
+519
+00:21:45,300 --> 00:21:47,939
+had the pointer that was pointing to this node
+
+520
+00:21:47,939 --> 00:21:51,180
+and so basically what we've done here is just orphaned
+
+521
+00:21:51,550 --> 00:21:52,459
+that node.
+
+522
+00:21:53,420 --> 00:21:55,170
+So what do we want to do instead?
+
+523
+00:21:58,109 --> 00:21:58,630
+So instead,
+
+524
+00:21:58,670 --> 00:21:59,010
+what we,
+
+525
+00:21:59,150 --> 00:22:00,300
+what we might consider
+
+526
+00:22:00,550 --> 00:22:02,280
+is creating a pointer.
+
+527
+00:22:03,380 --> 00:22:05,239
+Called PTR here pointer,
+
+528
+00:22:05,739 --> 00:22:07,890
+and we're gonna set that to list,
+
+529
+00:22:08,329 --> 00:22:10,229
+list um next.
+
+530
+00:22:11,030 --> 00:22:11,880
+And so
+
+531
+00:22:12,209 --> 00:22:12,920
+now.
+
+532
+00:22:13,640 --> 00:22:16,369
+The address of that 2nd node
+
+533
+00:22:16,619 --> 00:22:18,520
+that before I orphaned,
+
+534
+00:22:19,010 --> 00:22:21,410
+I'm saving this in a temporary pointer.
+
+535
+00:22:22,829 --> 00:22:24,310
+So now I can free list,
+
+536
+00:22:24,479 --> 00:22:27,790
+and I still have pointer pointing to the next node.
+
+537
+00:22:29,160 --> 00:22:32,000
+And so I can reset list to pointer,
+
+538
+00:22:32,310 --> 00:22:34,079
+so now it's said now it's
+
+539
+00:22:34,469 --> 00:22:35,910
+at that new node.
+
+540
+00:22:37,430 --> 00:22:38,300
+And again,
+
+541
+00:22:38,329 --> 00:22:39,900
+I can reset pointer
+
+542
+00:22:40,489 --> 00:22:41,040
+to
+
+543
+00:22:41,329 --> 00:22:42,839
+the new next
+
+544
+00:22:43,089 --> 00:22:43,699
+pointer.
+
+545
+00:22:44,250 --> 00:22:44,800
+In this case,
+
+546
+00:22:44,849 --> 00:22:46,599
+since we're at the end of the list,
+
+547
+00:22:46,689 --> 00:22:48,050
+it's just equal to null.
+
+548
+00:22:50,630 --> 00:22:52,219
+But then I can free list
+
+549
+00:22:53,099 --> 00:22:54,510
+pointers and equal and null,
+
+550
+00:22:54,630 --> 00:22:56,420
+which means I'm at the end of my list,
+
+551
+00:22:56,709 --> 00:22:57,459
+and now
+
+552
+00:22:58,020 --> 00:22:59,260
+everything has been freed
+
+553
+00:22:59,550 --> 00:23:02,150
+and we won't have any memory issues.
+
+554
+00:23:06,140 --> 00:23:06,560
+OK.
+
+555
+00:23:07,699 --> 00:23:09,109
+So now we're gonna
+
+556
+00:23:09,560 --> 00:23:10,910
+implement this into
+
+557
+00:23:11,359 --> 00:23:13,760
+the program that we're working on to extend
+
+558
+00:23:14,040 --> 00:23:16,869
+list to traverse the link list and print each number,
+
+559
+00:23:17,359 --> 00:23:19,910
+and then we're gonna free each node.
+
+560
+00:23:22,609 --> 00:23:22,619
+OK.
+
+561
+00:23:24,810 --> 00:23:25,229
+So
+
+562
+00:23:26,770 --> 00:23:28,280
+So this code has now
+
+563
+00:23:28,630 --> 00:23:30,109
+created a linked list.
+
+564
+00:23:31,510 --> 00:23:34,989
+Of 3 numbers that were given to us by the user.
+
+565
+00:23:36,510 --> 00:23:40,079
+And so now I'm going to try to print all of my nodes.
+
+566
+00:23:41,140 --> 00:23:44,050
+So I know I'm gonna use some sort of loop to go through each one.
+
+567
+00:23:46,329 --> 00:23:47,219
+And then
+
+568
+00:23:47,949 --> 00:23:48,660
+instead of
+
+569
+00:23:48,829 --> 00:23:49,630
+um.
+
+570
+00:23:50,349 --> 00:23:50,890
+A
+
+571
+00:23:52,229 --> 00:23:54,819
+Into I less than 3 here,
+
+572
+00:23:55,390 --> 00:23:56,609
+what might I do
+
+573
+00:23:57,189 --> 00:24:00,180
+to start with like the head of my list
+
+574
+00:24:00,510 --> 00:24:01,180
+and go
+
+575
+00:24:01,430 --> 00:24:02,349
+node by node.
+
+576
+00:24:11,349 --> 00:24:13,160
+So I can start with.
+
+577
+00:24:14,760 --> 00:24:16,250
+A note called Pointer.
+
+578
+00:24:18,229 --> 00:24:21,010
+And I'm gonna set that to the beginning of my list here,
+
+579
+00:24:21,140 --> 00:24:21,890
+which is list.
+
+580
+00:24:22,859 --> 00:24:22,869
+Right.
+
+581
+00:24:27,250 --> 00:24:27,859
+And then
+
+582
+00:24:28,030 --> 00:24:29,949
+so this method that we're working on here is
+
+583
+00:24:29,949 --> 00:24:31,780
+slightly different to what I just showed you,
+
+584
+00:24:31,989 --> 00:24:32,420
+but
+
+585
+00:24:32,829 --> 00:24:34,709
+it has the same ideas.
+
+586
+00:24:35,500 --> 00:24:36,119
+Of
+
+587
+00:24:36,390 --> 00:24:40,489
+traversing the list one by one and also making sure that we're keeping track.
+
+588
+00:24:44,969 --> 00:24:47,089
+So if we're going one by one and we're printing,
+
+589
+00:24:47,300 --> 00:24:48,010
+I'm gonna
+
+590
+00:24:48,500 --> 00:24:49,290
+keep it,
+
+591
+00:24:49,420 --> 00:24:51,189
+keep looping until
+
+592
+00:24:51,500 --> 00:24:52,859
+my pointer.
+
+593
+00:24:53,650 --> 00:24:55,349
+Is what?
+
+594
+00:24:57,099 --> 00:24:59,469
+What indicates the end of my list?
+
+595
+00:25:01,180 --> 00:25:01,400
+Yeah,
+
+596
+00:25:01,599 --> 00:25:02,229
+no,
+
+597
+00:25:02,880 --> 00:25:04,630
+so as long as this doesn't equal no,
+
+598
+00:25:05,239 --> 00:25:06,750
+then I can keep looping.
+
+599
+00:25:09,069 --> 00:25:10,489
+And then each time
+
+600
+00:25:10,699 --> 00:25:11,790
+this iterates,
+
+601
+00:25:12,260 --> 00:25:13,859
+I wanna go to.
+
+602
+00:25:14,819 --> 00:25:15,979
+My pointer should be.
+
+603
+00:25:16,939 --> 00:25:18,010
+Going to the next.
+
+604
+00:25:18,890 --> 00:25:19,410
+Node
+
+605
+00:25:21,099 --> 00:25:21,459
+OK.
+
+606
+00:25:23,150 --> 00:25:24,280
+So now this 4 loop
+
+607
+00:25:25,540 --> 00:25:26,250
+We'll go
+
+608
+00:25:26,500 --> 00:25:27,270
+one by one
+
+609
+00:25:27,500 --> 00:25:29,890
+through the link list until I reach the end.
+
+610
+00:25:31,589 --> 00:25:32,780
+And so for each node,
+
+611
+00:25:32,979 --> 00:25:34,709
+I also want to print out
+
+612
+00:25:34,979 --> 00:25:36,839
+the number that I associated
+
+613
+00:25:37,380 --> 00:25:37,859
+with it.
+
+614
+00:25:41,349 --> 00:25:43,119
+So how do I get that number
+
+615
+00:25:43,369 --> 00:25:44,709
+from the pointer
+
+616
+00:25:45,849 --> 00:25:46,640
+that I'm on?
+
+617
+00:25:50,900 --> 00:25:51,979
+So if I'm on the first,
+
+618
+00:25:52,109 --> 00:25:53,709
+then I also then I want to get the.
+
+619
+00:25:55,060 --> 00:25:57,069
+Number that the user gave us,
+
+620
+00:25:57,280 --> 00:25:57,479
+yeah,
+
+621
+00:25:57,640 --> 00:25:58,959
+so I'm gonna do pointer.
+
+622
+00:26:00,010 --> 00:26:00,719
+Number
+
+623
+00:26:00,890 --> 00:26:01,619
+to get
+
+624
+00:26:01,849 --> 00:26:02,569
+that number.
+
+625
+00:26:04,959 --> 00:26:05,439
+OK.
+
+626
+00:26:07,640 --> 00:26:07,650
+Great.
+
+627
+00:26:09,140 --> 00:26:10,420
+And so
+
+628
+00:26:11,109 --> 00:26:12,020
+now.
+
+629
+00:26:13,439 --> 00:26:15,189
+This prints out our nodes,
+
+630
+00:26:15,359 --> 00:26:17,069
+but we also want to remember
+
+631
+00:26:17,479 --> 00:26:19,880
+to free those nodes as well,
+
+632
+00:26:20,719 --> 00:26:21,119
+OK.
+
+633
+00:26:22,939 --> 00:26:25,209
+So similar to what we saw just now.
+
+634
+00:26:26,969 --> 00:26:29,959
+I do want to create some sort of temporary pointer variable,
+
+635
+00:26:30,329 --> 00:26:30,729
+um,
+
+636
+00:26:30,810 --> 00:26:31,849
+since this one
+
+637
+00:26:32,209 --> 00:26:34,010
+was just within my for loop,
+
+638
+00:26:34,290 --> 00:26:35,650
+I'm gonna create a new one here.
+
+639
+00:26:37,930 --> 00:26:38,800
+That is
+
+640
+00:26:39,180 --> 00:26:40,199
+outside of that scope.
+
+641
+00:26:40,959 --> 00:26:41,750
+And
+
+642
+00:26:41,920 --> 00:26:43,069
+I'm also
+
+643
+00:26:43,520 --> 00:26:44,510
+going to set up.
+
+644
+00:26:46,020 --> 00:26:47,689
+A while loop to keep
+
+645
+00:26:47,939 --> 00:26:50,650
+looping until I get to the end of my list.
+
+646
+00:26:51,510 --> 00:26:54,410
+So what should my pointer be set to
+
+647
+00:26:54,650 --> 00:26:55,449
+initially?
+
+648
+00:27:00,380 --> 00:27:00,569
+Yeah,
+
+649
+00:27:00,609 --> 00:27:01,680
+we can start it at list,
+
+650
+00:27:01,770 --> 00:27:02,199
+right?
+
+651
+00:27:04,589 --> 00:27:05,229
+And then
+
+652
+00:27:07,109 --> 00:27:07,760
+What
+
+653
+00:27:07,949 --> 00:27:08,550
+should I,
+
+654
+00:27:08,670 --> 00:27:11,260
+what should the condition be within this wild loop?
+
+655
+00:27:11,869 --> 00:27:14,939
+How long should I be looping for?
+
+656
+00:27:18,819 --> 00:27:19,089
+Yeah,
+
+657
+00:27:19,209 --> 00:27:21,520
+so as long as this pointer does not equal
+
+658
+00:27:22,209 --> 00:27:22,849
+null,
+
+659
+00:27:23,849 --> 00:27:26,079
+then that means we haven't reached the end of the list yet.
+
+660
+00:27:26,890 --> 00:27:27,329
+OK.
+
+661
+00:27:28,239 --> 00:27:29,979
+And so like we saw earlier,
+
+662
+00:27:29,989 --> 00:27:31,060
+I need some sort of
+
+663
+00:27:31,869 --> 00:27:35,339
+variable that tracks the next node
+
+664
+00:27:35,459 --> 00:27:38,349
+that I'm on so that I don't just free the one I'm on
+
+665
+00:27:38,630 --> 00:27:40,939
+and or from the rest of the list
+
+666
+00:27:41,550 --> 00:27:44,140
+so I'm gonna create a temporary
+
+667
+00:27:44,410 --> 00:27:45,349
+variable here.
+
+668
+00:27:47,270 --> 00:27:50,319
+And what should it initially be set to here?
+
+669
+00:27:56,339 --> 00:27:58,589
+Or in fact I guess this pointer
+
+670
+00:27:59,099 --> 00:28:00,890
+will be the one that will be going through,
+
+671
+00:28:01,339 --> 00:28:03,849
+but then this temporary variable will hold
+
+672
+00:28:04,420 --> 00:28:05,020
+the
+
+673
+00:28:05,819 --> 00:28:06,650
+variable
+
+674
+00:28:06,819 --> 00:28:07,410
+that
+
+675
+00:28:07,579 --> 00:28:08,650
+I'm currently on.
+
+676
+00:28:08,660 --> 00:28:10,250
+We could do it both ways here.
+
+677
+00:28:11,270 --> 00:28:12,810
+So I could set it to pointer.
+
+678
+00:28:14,219 --> 00:28:15,150
+And then
+
+679
+00:28:15,609 --> 00:28:17,060
+and then move pointer.
+
+680
+00:28:18,770 --> 00:28:21,160
+To pointer next,
+
+681
+00:28:21,449 --> 00:28:21,770
+right?
+
+682
+00:28:23,010 --> 00:28:24,079
+So this way
+
+683
+00:28:24,609 --> 00:28:27,160
+we're saving this value of pointer
+
+684
+00:28:27,609 --> 00:28:28,170
+in
+
+685
+00:28:28,729 --> 00:28:30,400
+our temporary node
+
+686
+00:28:30,729 --> 00:28:32,359
+and then we're moving pointer.
+
+687
+00:28:32,810 --> 00:28:35,229
+You could also do it the other way around where
+
+688
+00:28:35,530 --> 00:28:36,160
+you
+
+689
+00:28:36,530 --> 00:28:38,849
+move temporary variable to the next one
+
+690
+00:28:39,170 --> 00:28:40,270
+and then free pointer,
+
+691
+00:28:40,290 --> 00:28:41,689
+but we're gonna do it this way.
+
+692
+00:28:43,280 --> 00:28:44,319
+And then which
+
+693
+00:28:44,489 --> 00:28:46,119
+variable here am I freeing?
+
+694
+00:28:56,670 --> 00:28:58,479
+So some people are saying pointer.
+
+695
+00:28:58,810 --> 00:29:00,209
+If I freed pointer.
+
+696
+00:29:01,109 --> 00:29:02,619
+Which is now set to
+
+697
+00:29:03,349 --> 00:29:04,260
+pointer next.
+
+698
+00:29:05,729 --> 00:29:10,000
+Then that would be freeing that next one but not the one I'm currently on and also not
+
+699
+00:29:10,130 --> 00:29:12,680
+the ones beyond that so it should be
+
+700
+00:29:12,680 --> 00:29:15,130
+exactly like some people are saying freeing temp.
+
+701
+00:29:16,339 --> 00:29:17,339
+So that frees
+
+702
+00:29:17,459 --> 00:29:19,099
+the node that I'm currently on
+
+703
+00:29:19,349 --> 00:29:22,479
+and then I have pointer pointing to the next node.
+
+704
+00:29:23,130 --> 00:29:24,640
+So that when this loop
+
+705
+00:29:24,930 --> 00:29:26,000
+runs again,
+
+706
+00:29:26,290 --> 00:29:28,329
+and if I have still some
+
+707
+00:29:28,449 --> 00:29:29,729
+some of the list to go to.
+
+708
+00:29:31,199 --> 00:29:31,640
+Then
+
+709
+00:29:32,219 --> 00:29:32,859
+pointer.
+
+710
+00:29:33,760 --> 00:29:35,410
+We now point to that next
+
+711
+00:29:35,760 --> 00:29:38,430
+node and I will now have temporary
+
+712
+00:29:38,680 --> 00:29:39,910
+this temporary node
+
+713
+00:29:40,280 --> 00:29:41,040
+set to pointer.
+
+714
+00:29:41,069 --> 00:29:42,750
+I'm gonna update pointer to the next one
+
+715
+00:29:43,280 --> 00:29:45,089
+and then free temporary.
+
+716
+00:29:47,300 --> 00:29:47,680
+OK.
+
+717
+00:29:49,239 --> 00:29:50,790
+So let's,
+
+718
+00:29:50,930 --> 00:29:52,199
+why don't we try this out
+
+719
+00:29:52,689 --> 00:29:54,839
+and make sure it compiles.
+
+720
+00:29:55,949 --> 00:29:56,459
+Oops.
+
+721
+00:29:58,209 --> 00:29:58,489
+OK,
+
+722
+00:29:58,599 --> 00:29:59,910
+so I'm gonna make a list.
+
+723
+00:30:03,550 --> 00:30:03,880
+Ah,
+
+724
+00:30:03,989 --> 00:30:05,579
+silly let's stick here.
+
+725
+00:30:07,880 --> 00:30:08,449
+OK.
+
+726
+00:30:09,770 --> 00:30:11,209
+So it's gonna ask me for 3 numbers.
+
+727
+00:30:11,239 --> 00:30:13,550
+I'm gonna say 123.
+
+728
+00:30:14,319 --> 00:30:15,739
+And then it prints them out.
+
+729
+00:30:17,030 --> 00:30:19,170
+And does anyone know why?
+
+730
+00:30:20,349 --> 00:30:21,099
+It's pointing,
+
+731
+00:30:21,180 --> 00:30:22,359
+it's printing them out
+
+732
+00:30:22,670 --> 00:30:24,729
+321 and not 123.
+
+733
+00:30:24,900 --> 00:30:25,930
+Why is that happening?
+
+734
+00:30:31,839 --> 00:30:32,030
+Yeah,
+
+735
+00:30:32,189 --> 00:30:33,099
+someone said yo,
+
+736
+00:30:33,189 --> 00:30:33,910
+first in,
+
+737
+00:30:34,109 --> 00:30:34,949
+last out.
+
+738
+00:30:36,130 --> 00:30:37,000
+So,
+
+739
+00:30:37,349 --> 00:30:38,829
+because of the way that we set this up,
+
+740
+00:30:38,839 --> 00:30:39,010
+right,
+
+741
+00:30:39,069 --> 00:30:39,540
+where
+
+742
+00:30:39,829 --> 00:30:40,310
+we've
+
+743
+00:30:40,630 --> 00:30:41,229
+added
+
+744
+00:30:41,510 --> 00:30:42,239
+one first,
+
+745
+00:30:42,310 --> 00:30:43,550
+we've created one.
+
+746
+00:30:44,369 --> 00:30:46,199
+To be set into a node
+
+747
+00:30:46,369 --> 00:30:46,930
+and then.
+
+748
+00:30:48,089 --> 00:30:49,310
+When we create 2,
+
+749
+00:30:49,689 --> 00:30:52,920
+we've made to the next head of the list
+
+750
+00:30:53,449 --> 00:30:55,510
+and then when we get 3,
+
+751
+00:30:55,839 --> 00:30:58,239
+the same thing we create a node for 3
+
+752
+00:30:58,729 --> 00:31:01,449
+and that sets 3 to be the head of the list and
+
+753
+00:31:01,449 --> 00:31:04,280
+so when we're printing this out and we're starting at the head,
+
+754
+00:31:04,560 --> 00:31:06,079
+it's gonna print out 3,
+
+755
+00:31:06,160 --> 00:31:06,880
+then 2,
+
+756
+00:31:07,089 --> 00:31:07,569
+then 1.
+
+757
+00:31:08,589 --> 00:31:08,599
+OK,
+
+758
+00:31:09,380 --> 00:31:09,660
+great.
+
+759
+00:31:11,910 --> 00:31:13,709
+Any questions about?
+
+760
+00:31:14,829 --> 00:31:16,699
+Anything about this program.
+
+761
+00:31:27,099 --> 00:31:27,699
+OK.
+
+762
+00:31:30,689 --> 00:31:31,250
+OK.
+
+763
+00:31:32,780 --> 00:31:36,359
+So building on this understanding of linked lists,
+
+764
+00:31:36,719 --> 00:31:39,069
+now we're going to talk a bit about hash tables.
+
+765
+00:31:39,920 --> 00:31:40,479
+So,
+
+766
+00:31:42,209 --> 00:31:44,280
+A linked list like so.
+
+767
+00:31:45,969 --> 00:31:48,479
+Stores our values in like one
+
+768
+00:31:48,729 --> 00:31:49,800
+long list
+
+769
+00:31:50,250 --> 00:31:53,130
+um and what might be some like advantages
+
+770
+00:31:53,130 --> 00:31:56,170
+of this and what might be some disadvantages.
+
+771
+00:31:57,880 --> 00:31:58,400
+For example,
+
+772
+00:31:58,560 --> 00:32:01,329
+how long might it take for me to search
+
+773
+00:32:01,880 --> 00:32:02,550
+for
+
+774
+00:32:02,800 --> 00:32:05,109
+a certain value in my link list?
+
+775
+00:32:17,459 --> 00:32:17,979
+Yeah,
+
+776
+00:32:18,109 --> 00:32:18,229
+yeah,
+
+777
+00:32:18,349 --> 00:32:19,540
+so people are saying it's.
+
+778
+00:32:21,119 --> 00:32:21,310
+Yeah,
+
+779
+00:32:21,390 --> 00:32:22,699
+it's better in memory,
+
+780
+00:32:22,989 --> 00:32:23,510
+but
+
+781
+00:32:23,790 --> 00:32:24,989
+it's O of N
+
+782
+00:32:25,099 --> 00:32:26,020
+so what does that mean?
+
+783
+00:32:26,270 --> 00:32:28,420
+It means that if I'm searching for something,
+
+784
+00:32:29,229 --> 00:32:34,660
+I might have to go through and look at each value in my link list before I find that
+
+785
+00:32:34,869 --> 00:32:35,189
+thing.
+
+786
+00:32:35,829 --> 00:32:38,339
+And so it has an O and run time.
+
+787
+00:32:40,520 --> 00:32:43,300
+And so can we do better than that is the question here
+
+788
+00:32:43,630 --> 00:32:45,300
+and hash table
+
+789
+00:32:45,630 --> 00:32:49,270
+is another way of storing these values
+
+790
+00:32:50,270 --> 00:32:52,719
+hash table is basically an array
+
+791
+00:32:53,069 --> 00:32:56,260
+and in each array is a new linked list
+
+792
+00:32:56,790 --> 00:32:57,579
+and so.
+
+793
+00:32:58,030 --> 00:33:00,290
+This hash table here that we've created
+
+794
+00:33:00,540 --> 00:33:02,619
+is bucketizing so like
+
+795
+00:33:02,939 --> 00:33:04,859
+splitting up our entries
+
+796
+00:33:05,339 --> 00:33:07,130
+based on a certain rule.
+
+797
+00:33:07,420 --> 00:33:10,719
+So given a certain phrase like hey or hello,
+
+798
+00:33:11,140 --> 00:33:14,250
+I'm gonna give you a certain bucket that that should go into.
+
+799
+00:33:14,650 --> 00:33:18,609
+So in this case our rule is just based on the first letter
+
+800
+00:33:18,939 --> 00:33:19,300
+so.
+
+801
+00:33:20,030 --> 00:33:22,650
+Anything that starts with an H is gonna stay
+
+802
+00:33:22,859 --> 00:33:24,180
+in that age bucket.
+
+803
+00:33:24,959 --> 00:33:28,089
+And it's going to be its own link list separate from,
+
+804
+00:33:28,449 --> 00:33:28,880
+say,
+
+805
+00:33:29,050 --> 00:33:30,000
+low there,
+
+806
+00:33:30,170 --> 00:33:31,890
+which will be in this L bucket.
+
+807
+00:33:33,900 --> 00:33:37,599
+And so this sort of has the same tradeoffs here.
+
+808
+00:33:37,810 --> 00:33:39,949
+Now we're taking up a lot more memory
+
+809
+00:33:40,410 --> 00:33:42,280
+because we have a new bucket
+
+810
+00:33:42,609 --> 00:33:44,680
+for every single letter of the alphabet
+
+811
+00:33:44,969 --> 00:33:47,599
+and even if they're not all gonna be used.
+
+812
+00:33:48,739 --> 00:33:50,910
+But it is gonna be a little bit faster
+
+813
+00:33:51,199 --> 00:33:54,550
+since if I know the word I'm searching for starts with an H,
+
+814
+00:33:54,880 --> 00:33:56,760
+I don't have to look at all the other buckets.
+
+815
+00:33:56,800 --> 00:33:58,640
+I can just check the H bucket.
+
+816
+00:34:01,050 --> 00:34:01,060
+OK,
+
+817
+00:34:01,680 --> 00:34:04,160
+and so each bucket also has a certain index,
+
+818
+00:34:04,800 --> 00:34:06,989
+and that's where our hash function comes in.
+
+819
+00:34:07,280 --> 00:34:10,290
+It basically will just map some input.
+
+820
+00:34:11,110 --> 00:34:12,478
+So say we're looking for hay.
+
+821
+00:34:13,168 --> 00:34:15,978
+It's gonna input that into our hash function,
+
+822
+00:34:16,447 --> 00:34:20,118
+and our hash function will return us the index of that bucket.
+
+823
+00:34:20,279 --> 00:34:21,228
+So in this case,
+
+824
+00:34:21,958 --> 00:34:22,438
+7.
+
+825
+00:34:24,610 --> 00:34:25,050
+OK.
+
+826
+00:34:27,810 --> 00:34:31,199
+So what if we tried a different hash function,
+
+827
+00:34:31,610 --> 00:34:33,188
+so a different way of mapping
+
+828
+00:34:33,610 --> 00:34:34,120
+our.
+
+829
+00:34:35,030 --> 00:34:35,659
+Entries
+
+830
+00:34:35,770 --> 00:34:37,168
+to buckets.
+
+831
+00:34:38,208 --> 00:34:41,139
+So what might the mapping be in this
+
+832
+00:34:41,340 --> 00:34:42,179
+case here?
+
+833
+00:34:44,270 --> 00:34:45,639
+You can see the pattern.
+
+834
+00:34:52,219 --> 00:34:54,300
+How are these three words mapped
+
+835
+00:34:54,860 --> 00:34:55,929
+to buckets?
+
+836
+00:35:04,129 --> 00:35:04,290
+Yeah,
+
+837
+00:35:04,370 --> 00:35:06,219
+the length quantity of numbers,
+
+838
+00:35:06,370 --> 00:35:06,649
+exactly,
+
+839
+00:35:06,770 --> 00:35:07,120
+so
+
+840
+00:35:07,370 --> 00:35:08,320
+in this case.
+
+841
+00:35:09,419 --> 00:35:11,449
+We've defined our hash function to be
+
+842
+00:35:12,060 --> 00:35:14,300
+whatever the length of our string is,
+
+843
+00:35:14,739 --> 00:35:15,250
+so
+
+844
+00:35:16,060 --> 00:35:18,689
+in this case if I'm given hey exclamation point,
+
+845
+00:35:18,820 --> 00:35:20,000
+then I'm gonna be
+
+846
+00:35:20,260 --> 00:35:23,300
+the hash function will be returning 4 as the length.
+
+847
+00:35:25,790 --> 00:35:29,649
+And so a good hash function has certain properties.
+
+848
+00:35:30,060 --> 00:35:33,489
+It's always gonna give you the same value for the same input.
+
+849
+00:35:34,020 --> 00:35:34,540
+So
+
+850
+00:35:34,860 --> 00:35:36,010
+if I give it,
+
+851
+00:35:36,020 --> 00:35:36,629
+hey,
+
+852
+00:35:37,020 --> 00:35:41,409
+the hash function should always give me the same value and that should not change.
+
+853
+00:35:42,719 --> 00:35:43,540
+It also
+
+854
+00:35:43,699 --> 00:35:47,699
+will hopefully produce an even distribution across the buckets.
+
+855
+00:35:48,419 --> 00:35:51,629
+So every bucket should be more or less
+
+856
+00:35:52,340 --> 00:35:53,699
+um the same length.
+
+857
+00:35:54,850 --> 00:35:57,459
+And then we should also try to use all of the buckets.
+
+858
+00:35:58,350 --> 00:36:01,050
+And so given those features,
+
+859
+00:36:01,620 --> 00:36:07,209
+are the two examples that we just showed you good hash functions by those metrics.
+
+860
+00:36:10,850 --> 00:36:11,629
+And why,
+
+861
+00:36:11,679 --> 00:36:12,350
+if not.
+
+862
+00:36:13,810 --> 00:36:14,070
+Yeah,
+
+863
+00:36:14,189 --> 00:36:15,709
+so some people are saying no.
+
+864
+00:36:21,550 --> 00:36:21,780
+Yeah,
+
+865
+00:36:21,939 --> 00:36:23,530
+so some people are saying collisions,
+
+866
+00:36:23,659 --> 00:36:24,939
+empty buckets.
+
+867
+00:36:25,100 --> 00:36:26,199
+So if we looked at
+
+868
+00:36:26,659 --> 00:36:27,169
+this
+
+869
+00:36:27,469 --> 00:36:28,449
+initial
+
+870
+00:36:28,780 --> 00:36:31,810
+um hash function here that maps based on the first letter,
+
+871
+00:36:32,379 --> 00:36:33,280
+it could be
+
+872
+00:36:33,620 --> 00:36:34,290
+that
+
+873
+00:36:34,860 --> 00:36:37,370
+some words just don't start with the letter Z,
+
+874
+00:36:37,580 --> 00:36:38,250
+and then
+
+875
+00:36:38,699 --> 00:36:40,370
+that bucket is empty
+
+876
+00:36:40,620 --> 00:36:43,570
+and we also might have an uneven distribution
+
+877
+00:36:44,139 --> 00:36:45,689
+across these.
+
+878
+00:36:46,310 --> 00:36:46,709
+Um,
+
+879
+00:36:46,719 --> 00:36:47,239
+buckets,
+
+880
+00:36:47,399 --> 00:36:47,479
+right,
+
+881
+00:36:47,580 --> 00:36:51,989
+so we might have more words in the age category than we do in other categories.
+
+882
+00:36:54,520 --> 00:36:56,219
+And this one here as well,
+
+883
+00:36:56,590 --> 00:36:57,399
+it could be.
+
+884
+00:36:58,459 --> 00:36:59,409
+That we
+
+885
+00:36:59,780 --> 00:37:01,330
+only have
+
+886
+00:37:01,780 --> 00:37:04,929
+words of a certain length and we don't really have any more that are
+
+887
+00:37:05,340 --> 00:37:07,780
+longer than that and it could be also that
+
+888
+00:37:07,780 --> 00:37:10,669
+most words are probably gonna be within a certain
+
+889
+00:37:11,139 --> 00:37:12,449
+amount of
+
+890
+00:37:12,860 --> 00:37:14,149
+characters and so
+
+891
+00:37:14,620 --> 00:37:16,909
+we're gonna have a lot of collisions
+
+892
+00:37:17,379 --> 00:37:19,090
+which basically just means
+
+893
+00:37:19,419 --> 00:37:21,129
+we're gonna have multiple
+
+894
+00:37:21,379 --> 00:37:24,060
+entries mapped to the same hash bucket.
+
+895
+00:37:25,310 --> 00:37:26,770
+But a good hash function
+
+896
+00:37:27,080 --> 00:37:29,110
+would ideally only have.
+
+897
+00:37:30,010 --> 00:37:33,129
+A very short list or if not just one
+
+898
+00:37:33,580 --> 00:37:34,169
+value.
+
+899
+00:37:35,689 --> 00:37:36,300
+And
+
+900
+00:37:37,290 --> 00:37:37,800
+Each
+
+901
+00:37:40,219 --> 00:37:40,520
+Bucket,
+
+902
+00:37:40,590 --> 00:37:40,860
+yeah.
+
+903
+00:37:43,100 --> 00:37:43,770
+OK,
+
+904
+00:37:44,159 --> 00:37:46,760
+so any questions about hash functions?
+
+905
+00:37:55,550 --> 00:37:55,560
+OK,
+
+906
+00:37:56,260 --> 00:37:59,800
+so now we're gonna try to create our own hash function
+
+907
+00:38:00,540 --> 00:38:02,570
+just see what that looks like in code.
+
+908
+00:38:03,260 --> 00:38:04,729
+So if you're watching this,
+
+909
+00:38:04,989 --> 00:38:05,570
+um,
+
+910
+00:38:05,580 --> 00:38:06,129
+at home,
+
+911
+00:38:06,500 --> 00:38:08,729
+I encourage you to pause here and try it for yourself,
+
+912
+00:38:08,830 --> 00:38:10,929
+but we're gonna walk through it together here.
+
+913
+00:38:11,260 --> 00:38:13,979
+So create a function or program hash.c.
+
+914
+00:38:15,070 --> 00:38:18,120
+Where we will complete a hash function to return a number.
+
+915
+00:38:19,489 --> 00:38:21,199
+Between 0 and 25
+
+916
+00:38:21,699 --> 00:38:24,120
+depending on the first character and the word
+
+917
+00:38:24,489 --> 00:38:28,120
+and as we just talked about this hash function is not a great
+
+918
+00:38:28,649 --> 00:38:29,570
+hash function
+
+919
+00:38:29,850 --> 00:38:32,360
+and so we might try to find
+
+920
+00:38:32,530 --> 00:38:34,860
+a way that we can improve this hash function.
+
+921
+00:38:37,429 --> 00:38:37,929
+OK.
+
+922
+00:38:39,219 --> 00:38:41,340
+So I'm going to.
+
+923
+00:38:42,449 --> 00:38:44,100
+Code hash.c here.
+
+924
+00:38:46,350 --> 00:38:47,830
+And we're gonna include
+
+925
+00:38:48,239 --> 00:38:49,679
+some libraries.
+
+926
+00:38:58,679 --> 00:38:59,939
+Standardiota H.
+
+927
+00:39:00,800 --> 00:39:01,590
+And then
+
+928
+00:39:05,229 --> 00:39:06,530
+If there are more that we need,
+
+929
+00:39:06,550 --> 00:39:07,500
+we'll come back.
+
+930
+00:39:09,070 --> 00:39:11,300
+But I'm gonna create my main function here,
+
+931
+00:39:11,469 --> 00:39:12,110
+oops.
+
+932
+00:39:14,870 --> 00:39:16,629
+And just to test
+
+933
+00:39:16,879 --> 00:39:18,179
+our hash function.
+
+934
+00:39:19,070 --> 00:39:19,699
+Let's
+
+935
+00:39:19,989 --> 00:39:21,500
+create a string
+
+936
+00:39:22,030 --> 00:39:23,510
+that we get from the user.
+
+937
+00:39:24,729 --> 00:39:25,300
+So
+
+938
+00:39:25,570 --> 00:39:26,050
+word.
+
+939
+00:39:30,479 --> 00:39:32,510
+And then we'll print out.
+
+940
+00:39:33,229 --> 00:39:34,060
+The hash
+
+941
+00:39:34,540 --> 00:39:35,250
+value.
+
+942
+00:39:40,439 --> 00:39:41,139
+OK.
+
+943
+00:39:47,629 --> 00:39:51,159
+And we're gonna make some function called hash here that I haven't defined yet.
+
+944
+00:39:51,939 --> 00:39:53,010
+That takes in
+
+945
+00:39:53,139 --> 00:39:53,830
+a string.
+
+946
+00:39:57,580 --> 00:39:57,590
+OK.
+
+947
+00:39:58,989 --> 00:40:00,750
+So let's create.
+
+948
+00:40:02,209 --> 00:40:03,590
+This hash function.
+
+949
+00:40:05,110 --> 00:40:06,350
+So what is my input
+
+950
+00:40:06,679 --> 00:40:07,830
+to a hash function?
+
+951
+00:40:15,649 --> 00:40:15,870
+Yeah,
+
+952
+00:40:16,030 --> 00:40:16,709
+string,
+
+953
+00:40:16,909 --> 00:40:17,149
+yeah,
+
+954
+00:40:17,270 --> 00:40:18,300
+and someone says,
+
+955
+00:40:18,969 --> 00:40:19,350
+yeah.
+
+956
+00:40:20,370 --> 00:40:21,320
+Like we learned last week,
+
+957
+00:40:21,449 --> 00:40:22,889
+string is really just a char
+
+958
+00:40:23,459 --> 00:40:24,040
+star,
+
+959
+00:40:24,370 --> 00:40:27,080
+so I can just update that here and use
+
+960
+00:40:27,729 --> 00:40:28,600
+chartar.
+
+961
+00:40:30,879 --> 00:40:31,320
+Word.
+
+962
+00:40:32,090 --> 00:40:33,699
+And it's gonna take in this
+
+963
+00:40:34,010 --> 00:40:34,649
+word.
+
+964
+00:40:38,080 --> 00:40:40,649
+And it's gonna return to us some integer
+
+965
+00:40:40,830 --> 00:40:41,709
+and we know
+
+966
+00:40:42,030 --> 00:40:45,540
+we're hoping for it to be between 0 and 25 based on its first letter.
+
+967
+00:40:47,239 --> 00:40:47,770
+OK.
+
+968
+00:40:49,810 --> 00:40:51,300
+So
+
+969
+00:40:51,669 --> 00:40:52,340
+what?
+
+970
+00:40:53,270 --> 00:40:55,179
+Might we do to try to get
+
+971
+00:40:55,760 --> 00:40:57,780
+that first letter from
+
+972
+00:40:58,270 --> 00:40:59,280
+the string.
+
+973
+00:41:00,610 --> 00:41:00,840
+Yeah,
+
+974
+00:41:01,000 --> 00:41:02,429
+so we're trying to get its
+
+975
+00:41:02,679 --> 00:41:05,030
+trying to do something with its asy value.
+
+976
+00:41:12,100 --> 00:41:12,129
+So how might,
+
+977
+00:41:14,679 --> 00:41:15,510
+for example,
+
+978
+00:41:15,840 --> 00:41:16,270
+uh,
+
+979
+00:41:16,280 --> 00:41:17,219
+capital A,
+
+980
+00:41:18,070 --> 00:41:19,120
+Map to.
+
+981
+00:41:20,290 --> 00:41:21,239
+0.
+
+982
+00:41:32,229 --> 00:41:32,850
+OK,
+
+983
+00:41:32,929 --> 00:41:33,050
+yeah,
+
+984
+00:41:33,169 --> 00:41:34,439
+so we can do some like
+
+985
+00:41:35,250 --> 00:41:36,439
+arithmetic.
+
+986
+00:41:40,300 --> 00:41:42,379
+Someone says to upper the first character.
+
+987
+00:41:43,090 --> 00:41:43,560
+Yeah,
+
+988
+00:41:43,719 --> 00:41:45,479
+so that might be a good idea to
+
+989
+00:41:45,879 --> 00:41:47,149
+so the word we might get
+
+990
+00:41:47,429 --> 00:41:50,189
+could be lower case and it could be upper case,
+
+991
+00:41:50,280 --> 00:41:54,270
+and based on that that also changes its asy value.
+
+992
+00:41:54,320 --> 00:41:54,679
+So
+
+993
+00:41:54,959 --> 00:41:55,600
+with a,
+
+994
+00:41:55,679 --> 00:41:56,149
+for example,
+
+995
+00:41:56,330 --> 00:41:58,340
+if I was given a lower case a
+
+996
+00:41:58,679 --> 00:41:59,110
+then
+
+997
+00:41:59,360 --> 00:42:01,159
+that would have the value 97,
+
+998
+00:42:01,399 --> 00:42:03,219
+whereas if I'm given an uppercase A,
+
+999
+00:42:03,260 --> 00:42:08,550
+that's going to be 65 and so the arithmetic that we do there would be different
+
+1000
+00:42:08,879 --> 00:42:09,560
+and so
+
+1001
+00:42:09,879 --> 00:42:11,520
+we could just say like.
+
+1002
+00:42:12,850 --> 00:42:13,520
+If
+
+1003
+00:42:13,889 --> 00:42:16,000
+um it's upper case
+
+1004
+00:42:16,330 --> 00:42:16,959
+then
+
+1005
+00:42:17,209 --> 00:42:20,199
+do this conversion if it's lower case do this conversion.
+
+1006
+00:42:20,689 --> 00:42:22,239
+Another way we can do it here
+
+1007
+00:42:22,449 --> 00:42:23,000
+is
+
+1008
+00:42:23,290 --> 00:42:24,479
+to simply
+
+1009
+00:42:24,840 --> 00:42:25,449
+um.
+
+1010
+00:42:26,969 --> 00:42:28,540
+Get that first character,
+
+1011
+00:42:28,830 --> 00:42:30,590
+let's say call it C
+
+1012
+00:42:30,949 --> 00:42:31,790
+and just.
+
+1013
+00:42:32,649 --> 00:42:34,530
+Use the two upper function,
+
+1014
+00:42:34,929 --> 00:42:36,080
+which I
+
+1015
+00:42:36,969 --> 00:42:40,479
+should include here is in the C type library.
+
+1016
+00:42:43,379 --> 00:42:44,600
+So I'm in the two upper
+
+1017
+00:42:44,830 --> 00:42:46,939
+the first character.
+
+1018
+00:42:48,050 --> 00:42:52,120
+Which is gonna be the 0 index of word.
+
+1019
+00:42:54,139 --> 00:42:55,060
+OK,
+
+1020
+00:42:55,500 --> 00:42:55,969
+so
+
+1021
+00:42:56,320 --> 00:42:58,139
+once I know that this is uppercase.
+
+1022
+00:43:00,159 --> 00:43:02,189
+Then I can do a conversion here.
+
+1023
+00:43:04,260 --> 00:43:06,270
+And return,
+
+1024
+00:43:06,489 --> 00:43:06,949
+say.
+
+1025
+00:43:08,050 --> 00:43:09,120
+C minus.
+
+1026
+00:43:11,040 --> 00:43:12,770
+Lower uppercase
+
+1027
+00:43:13,479 --> 00:43:14,159
+A.
+
+1028
+00:43:14,560 --> 00:43:16,600
+So if this is in fact a.
+
+1029
+00:43:17,419 --> 00:43:20,770
+Which would mean it's has the value 65.
+
+1030
+00:43:21,100 --> 00:43:23,340
+If I subtract also the value 65,
+
+1031
+00:43:23,379 --> 00:43:24,250
+that'll give me zero,
+
+1032
+00:43:24,500 --> 00:43:25,290
+which will give
+
+1033
+00:43:25,580 --> 00:43:26,889
+that mapping of
+
+1034
+00:43:27,179 --> 00:43:28,060
+A to 0,
+
+1035
+00:43:28,510 --> 00:43:29,409
+B to 1,
+
+1036
+00:43:29,709 --> 00:43:30,649
+C to 2,
+
+1037
+00:43:30,800 --> 00:43:31,270
+etc.
+
+1038
+00:43:31,500 --> 00:43:32,179
+and etc.
+
+1039
+00:43:33,600 --> 00:43:34,070
+OK,
+
+1040
+00:43:34,189 --> 00:43:37,179
+what are some issues with this function?
+
+1041
+00:43:37,310 --> 00:43:40,139
+Are there any cases I might be forgetting about?
+
+1042
+00:43:41,840 --> 00:43:44,629
+Is there some way this could crash and everything.
+
+1043
+00:43:46,260 --> 00:43:47,330
+Would go wrong.
+
+1044
+00:43:55,239 --> 00:43:56,330
+So numbers,
+
+1045
+00:43:56,459 --> 00:43:56,659
+yeah,
+
+1046
+00:43:56,820 --> 00:43:57,969
+what if we
+
+1047
+00:43:58,699 --> 00:43:59,899
+are given a number?
+
+1048
+00:44:00,959 --> 00:44:02,530
+As the first character.
+
+1049
+00:44:06,510 --> 00:44:06,989
+Yeah,
+
+1050
+00:44:07,270 --> 00:44:07,479
+sure,
+
+1051
+00:44:07,550 --> 00:44:08,550
+so that could be one thing,
+
+1052
+00:44:08,629 --> 00:44:10,310
+so maybe we should check.
+
+1053
+00:44:11,489 --> 00:44:14,139
+Before we do this conversion and return this.
+
+1054
+00:44:15,229 --> 00:44:16,199
+Is
+
+1055
+00:44:16,629 --> 00:44:18,669
+my first character.
+
+1056
+00:44:23,360 --> 00:44:24,060
+A,
+
+1057
+00:44:24,459 --> 00:44:25,389
+um,
+
+1058
+00:44:25,639 --> 00:44:27,770
+or maybe I'll do this after I to up it.
+
+1059
+00:44:32,850 --> 00:44:33,040
+Yeah,
+
+1060
+00:44:33,120 --> 00:44:34,040
+is it alphabetical?
+
+1061
+00:44:34,080 --> 00:44:35,560
+I can do is alpha.
+
+1062
+00:44:37,199 --> 00:44:37,800
+See
+
+1063
+00:44:39,020 --> 00:44:39,959
+It is,
+
+1064
+00:44:40,250 --> 00:44:41,520
+then great,
+
+1065
+00:44:42,090 --> 00:44:43,250
+let's return.
+
+1066
+00:44:44,959 --> 00:44:46,469
+It's conversion.
+
+1067
+00:44:52,810 --> 00:44:52,969
+Yeah,
+
+1068
+00:44:53,090 --> 00:44:54,409
+so I could also put this here.
+
+1069
+00:44:55,830 --> 00:44:56,689
+And then
+
+1070
+00:44:58,139 --> 00:44:59,830
+Use word again here
+
+1071
+00:45:01,179 --> 00:45:03,110
+but to avoid.
+
+1072
+00:45:06,439 --> 00:45:08,530
+Avoid using this twice maybe
+
+1073
+00:45:08,800 --> 00:45:09,590
+I just
+
+1074
+00:45:10,280 --> 00:45:12,070
+first define Charsi
+
+1075
+00:45:12,360 --> 00:45:13,070
+as.
+
+1076
+00:45:14,169 --> 00:45:15,340
+This first character.
+
+1077
+00:45:17,459 --> 00:45:18,989
+And then I can you see here.
+
+1078
+00:45:20,550 --> 00:45:21,780
+Here I
+
+1079
+00:45:22,110 --> 00:45:24,120
+convert this to uppercase.
+
+1080
+00:45:28,310 --> 00:45:29,379
+And then return
+
+1081
+00:45:32,370 --> 00:45:32,679
+OK,
+
+1082
+00:45:32,800 --> 00:45:33,919
+so we caught this
+
+1083
+00:45:34,520 --> 00:45:36,270
+case that it's not
+
+1084
+00:45:37,239 --> 00:45:38,149
+alphabetical.
+
+1085
+00:45:38,280 --> 00:45:39,439
+If it's not alphabetical,
+
+1086
+00:45:39,479 --> 00:45:40,949
+maybe we should just return,
+
+1087
+00:45:41,399 --> 00:45:41,989
+say,
+
+1088
+00:45:42,679 --> 00:45:43,469
+um,
+
+1089
+00:45:44,000 --> 00:45:45,729
+0 as well,
+
+1090
+00:45:46,120 --> 00:45:48,419
+or we could say like 26 or something like that.
+
+1091
+00:45:48,429 --> 00:45:52,629
+That would all be up to the design of your hash function.
+
+1092
+00:45:53,040 --> 00:45:54,830
+Let's just say we return 0.
+
+1093
+00:45:56,110 --> 00:45:57,149
+Are there any other
+
+1094
+00:45:57,389 --> 00:45:59,500
+edge cases that I might be
+
+1095
+00:46:00,030 --> 00:46:01,709
+failing to account for?
+
+1096
+00:46:12,350 --> 00:46:12,360
+Mhm.
+
+1097
+00:46:16,469 --> 00:46:16,479
+Yeah
+
+1098
+00:46:18,959 --> 00:46:19,370
+That's true.
+
+1099
+00:46:19,439 --> 00:46:22,280
+This would hash to the same as a characters,
+
+1100
+00:46:22,439 --> 00:46:24,560
+so we could also say -1 maybe.
+
+1101
+00:46:27,389 --> 00:46:27,719
+Yeah.
+
+1102
+00:46:30,739 --> 00:46:31,189
+Someone asked,
+
+1103
+00:46:31,300 --> 00:46:32,610
+do we need an else here?
+
+1104
+00:46:34,159 --> 00:46:36,550
+Since we return at the end of this
+
+1105
+00:46:36,879 --> 00:46:38,189
+within the if,
+
+1106
+00:46:38,479 --> 00:46:39,590
+having an else here
+
+1107
+00:46:39,800 --> 00:46:42,540
+would not change the the logical flow,
+
+1108
+00:46:42,600 --> 00:46:42,989
+so.
+
+1109
+00:46:45,590 --> 00:46:45,800
+OK,
+
+1110
+00:46:45,879 --> 00:46:46,010
+well,
+
+1111
+00:46:46,040 --> 00:46:47,060
+let me propose,
+
+1112
+00:46:47,199 --> 00:46:48,110
+what if
+
+1113
+00:46:49,629 --> 00:46:51,270
+this Charar word
+
+1114
+00:46:51,919 --> 00:46:53,949
+doesn't have a first character?
+
+1115
+00:46:57,889 --> 00:46:58,780
+So if
+
+1116
+00:47:00,219 --> 00:47:02,350
+My word was not
+
+1117
+00:47:02,679 --> 00:47:03,639
+um
+
+1118
+00:47:03,840 --> 00:47:05,080
+like I wasn't given anything.
+
+1119
+00:47:05,090 --> 00:47:05,709
+I just
+
+1120
+00:47:06,639 --> 00:47:08,149
+got a string with
+
+1121
+00:47:09,050 --> 00:47:09,270
+no
+
+1122
+00:47:10,159 --> 00:47:11,070
+the null character.
+
+1123
+00:47:13,020 --> 00:47:14,820
+Then I should also probably.
+
+1124
+00:47:16,209 --> 00:47:20,870
+Account for that because otherwise if I try to index into the first character,
+
+1125
+00:47:21,239 --> 00:47:22,919
+that's gonna cause some issues.
+
+1126
+00:47:25,520 --> 00:47:27,590
+So maybe I'm gonna check if the word.
+
+1127
+00:47:29,820 --> 00:47:31,250
+Is no.
+
+1128
+00:47:34,110 --> 00:47:37,270
+Or you could say if the length of the word.
+
+1129
+00:47:38,750 --> 00:47:39,750
+is 0.
+
+1130
+00:47:41,639 --> 00:47:43,350
+Then let's return.
+
+1131
+00:47:45,479 --> 00:47:46,449
+Um,
+
+1132
+00:47:46,729 --> 00:47:47,739
+also negative one,
+
+1133
+00:47:47,760 --> 00:47:48,229
+maybe.
+
+1134
+00:47:57,560 --> 00:47:58,530
+OK.
+
+1135
+00:48:01,070 --> 00:48:01,340
+Yeah,
+
+1136
+00:48:01,459 --> 00:48:02,159
+someone's
+
+1137
+00:48:02,300 --> 00:48:03,379
+we're asking.
+
+1138
+00:48:04,830 --> 00:48:06,899
+If there's a space before.
+
+1139
+00:48:07,939 --> 00:48:08,489
+Yeah,
+
+1140
+00:48:08,689 --> 00:48:10,530
+so this would be up to.
+
+1141
+00:48:11,300 --> 00:48:15,060
+The design of your hash function if you wanted to
+
+1142
+00:48:15,199 --> 00:48:17,840
+to ignore white space before a word,
+
+1143
+00:48:18,209 --> 00:48:19,080
+you could do that.
+
+1144
+00:48:19,179 --> 00:48:20,080
+In this case
+
+1145
+00:48:20,850 --> 00:48:24,370
+we can just be really um simple about it and just take that
+
+1146
+00:48:24,370 --> 00:48:28,899
+first character if it's a space that means it's not an alphabetical character
+
+1147
+00:48:29,330 --> 00:48:30,929
+and just return -1.
+
+1148
+00:48:32,350 --> 00:48:35,000
+So let's try this now.
+
+1149
+00:48:35,290 --> 00:48:36,520
+What errors came up here?
+
+1150
+00:48:38,510 --> 00:48:38,520
+Oh.
+
+1151
+00:48:41,780 --> 00:48:42,229
+OK.
+
+1152
+00:48:48,989 --> 00:48:49,479
+Ah,
+
+1153
+00:48:50,189 --> 00:48:51,979
+what's the error here?
+
+1154
+00:48:52,189 --> 00:48:53,870
+Called undeclared function hash.
+
+1155
+00:48:54,989 --> 00:48:57,300
+What did I forget to do prototype.
+
+1156
+00:48:58,189 --> 00:48:58,419
+Yeah,
+
+1157
+00:48:58,580 --> 00:49:01,169
+so I need to find it up here before I use it.
+
+1158
+00:49:05,649 --> 00:49:06,179
+Um,
+
+1159
+00:49:06,229 --> 00:49:08,580
+and I also forgot to include string.
+
+1160
+00:49:08,810 --> 00:49:09,270
+H.
+
+1161
+00:49:10,919 --> 00:49:12,550
+So let's do that.
+
+1162
+00:49:16,919 --> 00:49:17,179
+Alright,
+
+1163
+00:49:17,419 --> 00:49:18,729
+no errors this time.
+
+1164
+00:49:19,260 --> 00:49:20,860
+I run slash hash
+
+1165
+00:49:21,260 --> 00:49:23,429
+and I give it the words say cat,
+
+1166
+00:49:23,739 --> 00:49:25,969
+then hopefully this should give us
+
+1167
+00:49:26,340 --> 00:49:26,860
+2.
+
+1168
+00:49:27,800 --> 00:49:28,580
+There we go.
+
+1169
+00:49:29,030 --> 00:49:29,979
+What if I
+
+1170
+00:49:30,189 --> 00:49:31,219
+give it nothing?
+
+1171
+00:49:31,270 --> 00:49:32,370
+I just press enter,
+
+1172
+00:49:32,959 --> 00:49:35,260
+hash value -1 like we defined here.
+
+1173
+00:49:35,469 --> 00:49:37,550
+I could even say maybe if it's empty,
+
+1174
+00:49:37,570 --> 00:49:38,739
+I just return
+
+1175
+00:49:39,189 --> 00:49:40,110
+-2.
+
+1176
+00:49:41,850 --> 00:49:43,139
+If I do lah.
+
+1177
+00:49:43,360 --> 00:49:44,000
+I give it nothing,
+
+1178
+00:49:44,080 --> 00:49:45,469
+then it gives us -2.
+
+1179
+00:49:45,820 --> 00:49:50,350
+If I do hash with a non-alphabetical
+
+1180
+00:49:51,239 --> 00:49:52,189
+word here,
+
+1181
+00:49:52,479 --> 00:49:53,030
+then
+
+1182
+00:49:53,399 --> 00:49:54,340
+we have -1,
+
+1183
+00:49:54,399 --> 00:49:56,719
+so we kind of have differentiated
+
+1184
+00:49:57,199 --> 00:49:58,709
+these two cases here.
+
+1185
+00:50:00,350 --> 00:50:01,669
+And of course for
+
+1186
+00:50:01,879 --> 00:50:03,560
+upper case and lower case.
+
+1187
+00:50:04,679 --> 00:50:05,919
+Cat should give us
+
+1188
+00:50:06,169 --> 00:50:06,620
+2.
+
+1189
+00:50:08,090 --> 00:50:08,649
+OK.
+
+1190
+00:50:09,800 --> 00:50:12,590
+Any questions about this hash function?
+
+1191
+00:50:22,360 --> 00:50:25,290
+Someone asks if there is a string method
+
+1192
+00:50:25,800 --> 00:50:26,739
+to check for spaces.
+
+1193
+00:50:26,800 --> 00:50:27,030
+Yeah,
+
+1194
+00:50:27,320 --> 00:50:29,090
+you can use is space.
+
+1195
+00:50:30,570 --> 00:50:32,510
+To check if something is a space,
+
+1196
+00:50:33,570 --> 00:50:35,570
+someone suggested the dot strip in Python,
+
+1197
+00:50:35,610 --> 00:50:35,889
+but yeah,
+
+1198
+00:50:35,929 --> 00:50:36,209
+that.
+
+1199
+00:50:37,320 --> 00:50:38,010
+Um,
+
+1200
+00:50:39,500 --> 00:50:41,919
+Is a Python specific function.
+
+1201
+00:50:43,330 --> 00:50:43,770
+OK.
+
+1202
+00:50:47,229 --> 00:50:47,699
+OK,
+
+1203
+00:50:47,820 --> 00:50:49,370
+so we have this hash function,
+
+1204
+00:50:49,699 --> 00:50:50,129
+but
+
+1205
+00:50:50,340 --> 00:50:51,260
+like we said before,
+
+1206
+00:50:51,300 --> 00:50:55,639
+it's maybe not great at being a good hash function
+
+1207
+00:50:56,020 --> 00:50:56,810
+and so
+
+1208
+00:50:57,100 --> 00:50:58,689
+what might be some
+
+1209
+00:50:58,899 --> 00:50:59,570
+small
+
+1210
+00:51:00,100 --> 00:51:01,600
+improvements we can make here
+
+1211
+00:51:02,260 --> 00:51:04,459
+to make this hash function a little bit better.
+
+1212
+00:51:10,360 --> 00:51:12,379
+So if we had a bunch of words.
+
+1213
+00:51:14,030 --> 00:51:15,939
+Say in like the H bucket,
+
+1214
+00:51:16,389 --> 00:51:17,780
+what would be a way of
+
+1215
+00:51:18,510 --> 00:51:23,020
+turning that into multiple buckets rather than just one each bucket.
+
+1216
+00:51:42,830 --> 00:51:43,750
+So like,
+
+1217
+00:51:43,959 --> 00:51:44,040
+yeah,
+
+1218
+00:51:44,120 --> 00:51:45,699
+we want to introduce more buckets,
+
+1219
+00:51:45,800 --> 00:51:46,120
+but.
+
+1220
+00:51:47,520 --> 00:51:49,550
+With more buckets,
+
+1221
+00:51:49,919 --> 00:51:52,709
+we need some sort of mapping to those buckets.
+
+1222
+00:51:55,139 --> 00:51:56,939
+So one way we could do it
+
+1223
+00:51:57,149 --> 00:51:57,780
+is
+
+1224
+00:51:58,070 --> 00:52:01,379
+maybe instead of just mapping by the first letter,
+
+1225
+00:52:01,989 --> 00:52:02,110
+yeah,
+
+1226
+00:52:02,189 --> 00:52:03,989
+we map by two letters maybe.
+
+1227
+00:52:05,139 --> 00:52:05,709
+OK,
+
+1228
+00:52:05,959 --> 00:52:06,989
+so let's,
+
+1229
+00:52:07,239 --> 00:52:09,360
+how would we update this now?
+
+1230
+00:52:11,370 --> 00:52:12,709
+Well,
+
+1231
+00:52:13,300 --> 00:52:15,439
+we should probably catch the case that
+
+1232
+00:52:16,239 --> 00:52:16,949
+This is
+
+1233
+00:52:18,209 --> 00:52:18,219
+Not
+
+1234
+00:52:19,949 --> 00:52:21,379
+Two letters long.
+
+1235
+00:52:23,800 --> 00:52:26,590
+So if the string length of the word.
+
+1236
+00:52:27,929 --> 00:52:28,770
+Is
+
+1237
+00:52:29,300 --> 00:52:29,820
+say.
+
+1238
+00:52:31,090 --> 00:52:32,489
+Less than 2.
+
+1239
+00:52:35,429 --> 00:52:36,510
+Then we should catch that.
+
+1240
+00:52:38,840 --> 00:52:39,320
+OK.
+
+1241
+00:52:44,639 --> 00:52:46,070
+Otherwise,
+
+1242
+00:52:46,800 --> 00:52:51,510
+how might I return some sort of value based on its first two letters?
+
+1243
+00:53:01,959 --> 00:53:03,179
+What if the word is just
+
+1244
+00:53:03,399 --> 00:53:04,149
+a,
+
+1245
+00:53:04,719 --> 00:53:04,870
+yeah,
+
+1246
+00:53:05,080 --> 00:53:05,320
+exactly.
+
+1247
+00:53:05,399 --> 00:53:06,560
+So if it's not long enough,
+
+1248
+00:53:06,600 --> 00:53:07,879
+then we can catch that.
+
+1249
+00:53:11,699 --> 00:53:11,939
+Yeah,
+
+1250
+00:53:11,979 --> 00:53:14,959
+we could do some sort of addition
+
+1251
+00:53:15,500 --> 00:53:16,060
+maybe.
+
+1252
+00:53:20,600 --> 00:53:21,330
+Although
+
+1253
+00:53:22,520 --> 00:53:23,750
+let's say if we.
+
+1254
+00:53:24,729 --> 00:53:24,750
+Took
+
+1255
+00:53:26,159 --> 00:53:26,790
+um.
+
+1256
+00:53:27,840 --> 00:53:30,830
+This is the 1st character and then the 2nd character.
+
+1257
+00:53:33,120 --> 00:53:34,840
+And we checked that they're both.
+
+1258
+00:53:36,679 --> 00:53:37,850
+Alphabetical.
+
+1259
+00:53:42,010 --> 00:53:42,899
+And then
+
+1260
+00:53:43,129 --> 00:53:44,860
+we uppercase both of them.
+
+1261
+00:53:49,590 --> 00:53:53,300
+If we added these values together.
+
+1262
+00:53:54,350 --> 00:53:55,300
+Like so.
+
+1263
+00:53:59,189 --> 00:54:04,830
+Would this have a unique bucket for every two letter combination?
+
+1264
+00:54:12,610 --> 00:54:13,679
+Someone says no,
+
+1265
+00:54:13,810 --> 00:54:14,689
+why is that?
+
+1266
+00:54:18,360 --> 00:54:20,449
+So if I had a word that started with.
+
+1267
+00:54:21,409 --> 00:54:21,429
+Say
+
+1268
+00:54:22,479 --> 00:54:23,810
+A C,
+
+1269
+00:54:25,120 --> 00:54:26,149
+that would be.
+
+1270
+00:54:28,219 --> 00:54:29,659
+A's corresponding with 0,
+
+1271
+00:54:29,860 --> 00:54:31,169
+C would correspond with 2.
+
+1272
+00:54:32,250 --> 00:54:34,419
+It could also have something like B.
+
+1273
+00:54:35,850 --> 00:54:36,540
+And
+
+1274
+00:54:37,199 --> 00:54:37,209
+Be
+
+1275
+00:54:38,350 --> 00:54:40,860
+that would give us the same bucket,
+
+1276
+00:54:40,949 --> 00:54:41,260
+yeah,
+
+1277
+00:54:41,469 --> 00:54:43,030
+so that would cause collision.
+
+1278
+00:54:46,729 --> 00:54:46,919
+Yeah,
+
+1279
+00:54:47,000 --> 00:54:48,919
+so someone is proposing
+
+1280
+00:54:49,520 --> 00:54:51,709
+we do this first letter is value,
+
+1281
+00:54:52,000 --> 00:54:52,479
+oops.
+
+1282
+00:54:53,850 --> 00:54:55,399
+Multiply that by 100.
+
+1283
+00:54:57,149 --> 00:54:58,649
+And then give us.
+
+1284
+00:55:00,070 --> 00:55:01,120
+And then add
+
+1285
+00:55:01,250 --> 00:55:02,120
+the second letter.
+
+1286
+00:55:03,770 --> 00:55:04,870
+So using this,
+
+1287
+00:55:04,919 --> 00:55:05,750
+that would mean
+
+1288
+00:55:06,120 --> 00:55:07,429
+something starting with
+
+1289
+00:55:07,600 --> 00:55:08,459
+the letters.
+
+1290
+00:55:09,340 --> 00:55:10,270
+AC
+
+1291
+00:55:10,590 --> 00:55:11,860
+would map to.
+
+1292
+00:55:13,620 --> 00:55:14,139
+2
+
+1293
+00:55:15,879 --> 00:55:17,000
+And BB
+
+1294
+00:55:17,610 --> 00:55:19,639
+would map to 101
+
+1295
+00:55:20,129 --> 00:55:20,840
+instead of
+
+1296
+00:55:21,040 --> 00:55:21,959
+also 2.
+
+1297
+00:55:24,540 --> 00:55:25,189
+So yeah,
+
+1298
+00:55:25,379 --> 00:55:28,129
+these are some techniques that we can use
+
+1299
+00:55:28,780 --> 00:55:29,229
+to
+
+1300
+00:55:29,500 --> 00:55:30,629
+differentiate
+
+1301
+00:55:30,860 --> 00:55:32,050
+the buckets
+
+1302
+00:55:32,510 --> 00:55:34,090
+of our inputs
+
+1303
+00:55:34,699 --> 00:55:36,350
+and so there are a lot of different ways of doing this.
+
+1304
+00:55:36,379 --> 00:55:38,620
+You could even instead of looking at the first two,
+
+1305
+00:55:38,699 --> 00:55:40,709
+maybe you take the sum
+
+1306
+00:55:41,020 --> 00:55:41,729
+of
+
+1307
+00:55:42,580 --> 00:55:46,790
+the all of the asking characters of our thing
+
+1308
+00:55:47,219 --> 00:55:47,820
+um.
+
+1309
+00:55:50,770 --> 00:55:51,189
+Yeah,
+
+1310
+00:55:51,360 --> 00:55:53,629
+you could do someone's proposing if we do,
+
+1311
+00:55:53,949 --> 00:55:54,479
+um.
+
+1312
+00:55:56,129 --> 00:55:57,379
+C + C1.
+
+1313
+00:55:58,469 --> 00:55:59,229
+Minus A,
+
+1314
+00:55:59,250 --> 00:56:00,659
+this might have the same
+
+1315
+00:56:01,060 --> 00:56:01,550
+issue
+
+1316
+00:56:01,790 --> 00:56:03,070
+that we just had where.
+
+1317
+00:56:04,800 --> 00:56:06,280
+We have some collisions,
+
+1318
+00:56:06,320 --> 00:56:07,909
+even if they're different
+
+1319
+00:56:08,520 --> 00:56:09,270
+values,
+
+1320
+00:56:09,860 --> 00:56:10,429
+but.
+
+1321
+00:56:11,750 --> 00:56:12,020
+Yeah,
+
+1322
+00:56:12,219 --> 00:56:13,139
+so these are some
+
+1323
+00:56:13,500 --> 00:56:16,080
+things you can think about as you're working on speller this
+
+1324
+00:56:16,080 --> 00:56:19,409
+week since you will also be implementing your own hash function
+
+1325
+00:56:19,580 --> 00:56:22,530
+and hopefully your hash function will be better
+
+1326
+00:56:22,780 --> 00:56:23,330
+than
+
+1327
+00:56:23,939 --> 00:56:28,260
+this one or the one that we first created where we just mapped by the first letter.
+
+1328
+00:56:29,679 --> 00:56:30,250
+But
+
+1329
+00:56:30,739 --> 00:56:35,090
+continue this line of thinking to keep thinking about how can we make these buckets
+
+1330
+00:56:35,580 --> 00:56:36,169
+more
+
+1331
+00:56:36,459 --> 00:56:37,790
+um even
+
+1332
+00:56:38,139 --> 00:56:39,330
+better distributed
+
+1333
+00:56:39,899 --> 00:56:42,340
+and thus making our search faster.
+
+1334
+00:56:44,540 --> 00:56:45,270
+OK.
+
+1335
+00:56:47,000 --> 00:56:47,919
+So with that,
+
+1336
+00:56:48,040 --> 00:56:51,459
+that's C50 week 5 on data structures,
+
+1337
+00:56:51,959 --> 00:56:52,040
+uh,
+
+1338
+00:56:52,070 --> 00:56:55,189
+and we hope you come back next week for week 6,
+
+1339
+00:56:55,399 --> 00:56:58,429
+where we'll be leaving C and moving to Python.
+
+1340
+00:56:59,590 --> 00:56:59,959
+OK,
+
+1341
+00:57:00,159 --> 00:57:00,820
+see you there.
